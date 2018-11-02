@@ -16,7 +16,7 @@ public class MineduinoSpigotPlugin extends JavaPlugin{
 		
 		
 	}
-	
+	//TEST
 	@Override
 	public void onDisable() {
 		
