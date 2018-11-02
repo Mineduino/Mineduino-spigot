@@ -1,0 +1,4 @@
+name: MineduinoSpigotPlugin
+main: com.mineduino.MineduinoSpigotPlugin.MineduinoSpigotPlugin
+author: Mineduino
+version: 
