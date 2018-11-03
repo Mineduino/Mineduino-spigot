@@ -1,5 +1,6 @@
 package com.mineduino.MineduinoSpigotPlugin;
 
+import com.mineduino.MineduinoSpigotPlugin.Callbacks.MessageCallback;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import com.mineduino.MineduinoSpigotPlugin.Handlers.SignalHandler;
@@ -25,23 +26,7 @@ public class MineduinoSpigotPlugin extends JavaPlugin{
             try {
                 client = new MqttClient("tcp://dev.mineduino.com:1883", MqttClient.generateClientId(), new MemoryPersistence());
                 client.connect();
-                client.setCallback(new MqttCallback() {
-                    @Override
-                    public void connectionLost(Throwable thrwbl) {
-                        
-                    }
-
-                    @Override
-                    public void messageArrived(String string, MqttMessage mm) throws Exception {
-                        getLogger().info(mm.toString());
-                    }
-
-                    @Override
-                    public void deliveryComplete(IMqttDeliveryToken imdt) {
-                        
-                    }
-                    
-                });
+                client.setCallback(new MessageCallback());
             } catch (MqttException ex) {
                 Logger.getLogger(MineduinoSpigotPlugin.class.getName()).log(Level.SEVERE, null, ex);
             }
