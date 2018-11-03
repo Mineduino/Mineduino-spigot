@@ -18,7 +18,7 @@ public class MineduinoSpigotPlugin extends JavaPlugin{
 	
 	@Override
 	public void onEnable() {
-		instance = this;		
+		instance = this;
             try {
                 client = new MqttClient("tcp://dev.mineduino.com:1883", MqttClient.generateClientId(), new MemoryPersistence());
                 client.connect();
@@ -27,7 +27,7 @@ public class MineduinoSpigotPlugin extends JavaPlugin{
                 Logger.getLogger(MineduinoSpigotPlugin.class.getName()).log(Level.SEVERE, null, ex);
             }
             try {
-                client.subscribe("test");
+                client.subscribe("#");
             } catch (MqttException ex) {
                 Logger.getLogger(MineduinoSpigotPlugin.class.getName()).log(Level.SEVERE, null, ex);
             }

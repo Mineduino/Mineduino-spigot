@@ -22,8 +22,9 @@ public class MessageCallback implements MqttCallback {
     }
 
     @Override
-    public void messageArrived(String string, MqttMessage mm) throws Exception {
-        Bukkit.getLogger().info(mm.toString());
+    public void messageArrived(String topic, MqttMessage message) throws Exception {
+        Bukkit.getLogger().info(topic + message.toString());
+        //Bukkit.getServer().getPluginManager().callEvent(new MQTTCallbackEvent(String string));
     }
 
     @Override
