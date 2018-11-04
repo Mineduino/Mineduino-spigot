@@ -1,22 +1,23 @@
 package com.mineduino.MineduinoSpigotPlugin.Events;
 
-import java.util.ArrayList;
-
 import org.bukkit.block.Block;
 import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
+import com.mineduino.MineduinoSpigotPlugin.Objects.OutputTriggerBlock;
+
 public class SignalEmitEvent extends Event implements Cancellable{
 	
 	private boolean cancelled = false;
-	private Block initBlock;
+	private OutputTriggerBlock output;
 	private int power;
-	private ArrayList<Block> wiresToAffect;
+	private Block firstWire;
 	
-	public SignalEmitEvent(Block initBlock, int power) {
-		this.initBlock = initBlock;
+	public SignalEmitEvent(OutputTriggerBlock output, int power, Block firstWire) {
+		this.output = output;
 		this.power = power;
+		this.firstWire = firstWire;
 	}
 
 	@Override
@@ -35,12 +36,16 @@ public class SignalEmitEvent extends Event implements Cancellable{
 		return null;
 	}
 	
-	public Block getInitBlock() {
-		return this.initBlock;
+	public OutputTriggerBlock getOutputBlock() {
+		return this.output;
 	}
 	
 	public int getPower() {
 		return this.power;
+	}
+	
+	public Block getFirstWire() {
+		return this.firstWire;
 	}
 	
 	public void setPower(int power) {

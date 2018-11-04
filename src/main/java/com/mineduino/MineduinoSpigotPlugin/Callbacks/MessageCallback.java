@@ -10,11 +10,16 @@ import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
+import com.mineduino.MineduinoSpigotPlugin.MineduinoSpigotPlugin;
+import com.mineduino.MineduinoSpigotPlugin.Events.MQTTCallbackEvent;
+
 /**
  *
  * @author adam
  */
 public class MessageCallback implements MqttCallback {
+	
+	MineduinoSpigotPlugin plugin = MineduinoSpigotPlugin.instance;
 
     @Override
     public void connectionLost(Throwable thrwbl) {
@@ -23,8 +28,8 @@ public class MessageCallback implements MqttCallback {
 
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
-        Bukkit.getLogger().info(topic + message.toString());
-        //Bukkit.getServer().getPluginManager().callEvent(new MQTTCallbackEvent(String string));
+        plugin.getLogger().info(topic + message.toString());
+        plugin.getServer().getPluginManager().callEvent(new MQTTCallbackEvent(topic, message));
     }
 
     @Override
