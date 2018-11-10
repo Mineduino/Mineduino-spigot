@@ -9,6 +9,8 @@ public final class MQTTCallbackEvent extends Event{
 	private String topic;
 	private MqttMessage msg;
 	
+	private final HandlerList handlers = new HandlerList();
+	
 	public MQTTCallbackEvent(String topic, MqttMessage msg) {
 		this.topic = topic;
 		this.msg = msg;
@@ -16,8 +18,7 @@ public final class MQTTCallbackEvent extends Event{
 
 	@Override
 	public HandlerList getHandlers() {
-		// TODO Auto-generated method stub
-		return null;
+		return handlers;
 	}
 	
 	public String getTopic() {

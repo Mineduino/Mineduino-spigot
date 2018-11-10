@@ -1,9 +1,12 @@
 package com.mineduino.MineduinoSpigotPlugin;
 
 import com.mineduino.MineduinoSpigotPlugin.Callbacks.MessageCallback;
+import com.mineduino.MineduinoSpigotPlugin.Configs.ConfigManager;
+import com.mineduino.MineduinoSpigotPlugin.Configs.MainConfig;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.BlockBreakListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.BlockPlaceListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.BlockRedstoneListener;
+import com.mineduino.MineduinoSpigotPlugin.Listeners.MQTTCallbackListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.SignalEmitListener;
 
 import org.bukkit.plugin.java.JavaPlugin;
@@ -20,12 +23,14 @@ import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 public class MineduinoSpigotPlugin extends JavaPlugin{
 	
 	public static MineduinoSpigotPlugin instance;
+	public static MainConfig mainCfg;
     public static MqttClient client;
 	
 	@Override
 	public void onEnable() {
 		instance = this;
 		ConfigManager.load();
+		mainCfg = new MainConfig();
         try {
         	client = new MqttClient("tcp://dev.mineduino.com:1883", MqttClient.generateClientId(), new MemoryPersistence());
         	client.connect();
@@ -41,6 +46,7 @@ public class MineduinoSpigotPlugin extends JavaPlugin{
         instance.getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
         instance.getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
         instance.getServer().getPluginManager().registerEvents(new BlockRedstoneListener(), this);
+        instance.getServer().getPluginManager().registerEvents(new MQTTCallbackListener(), this);
         instance.getServer().getPluginManager().registerEvents(new SignalEmitListener(), this);
 	}
 	

@@ -5,19 +5,23 @@ import org.bukkit.event.Cancellable;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 
-import com.mineduino.MineduinoSpigotPlugin.Objects.OutputTriggerBlock;
+import com.mineduino.MineduinoSpigotPlugin.TriggerBlocks.OutputTriggerBlock;
 
 public class SignalEmitEvent extends Event implements Cancellable{
 	
 	private boolean cancelled = false;
 	private OutputTriggerBlock output;
+	private Block firstWireBlock;
+	private int oldPower;
 	private int power;
-	private Block firstWire;
 	
-	public SignalEmitEvent(OutputTriggerBlock output, int power, Block firstWire) {
+	private final HandlerList handlers = new HandlerList();
+	
+	public SignalEmitEvent(OutputTriggerBlock output, Block firstWireBlock, int oldPower, int power) {
 		this.output = output;
+		this.firstWireBlock = firstWireBlock;
+		this.oldPower = oldPower;
 		this.power = power;
-		this.firstWire = firstWire;
 	}
 
 	@Override
@@ -32,20 +36,23 @@ public class SignalEmitEvent extends Event implements Cancellable{
 
 	@Override
 	public HandlerList getHandlers() {
-		// TODO Auto-generated method stub
-		return null;
+		return handlers;
 	}
 	
 	public OutputTriggerBlock getOutputBlock() {
 		return this.output;
 	}
 	
-	public int getPower() {
-		return this.power;
+	public Block getFirstWireBlock() {
+		return this.firstWireBlock;
 	}
 	
-	public Block getFirstWire() {
-		return this.firstWire;
+	public int getOldPower() {
+		return this.oldPower;
+	}
+	
+	public int getPower() {
+		return this.power;
 	}
 	
 	public void setPower(int power) {

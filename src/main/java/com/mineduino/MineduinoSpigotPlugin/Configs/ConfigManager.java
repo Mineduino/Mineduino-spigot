@@ -1,15 +1,17 @@
-package com.mineduino.MineduinoSpigotPlugin;
+package com.mineduino.MineduinoSpigotPlugin.Configs;
 
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.util.HashMap;
 
-abstract class ConfigManager {
+import com.mineduino.MineduinoSpigotPlugin.MineduinoSpigotPlugin;
+
+public abstract class ConfigManager {
 	
 	static File mainFolder;
 	
-	static void load(){
+	public static void load(){
 		mainFolder = MineduinoSpigotPlugin.instance.getDataFolder();
 		if(!mainFolder.exists()){
 			mainFolder.mkdir();
@@ -17,8 +19,11 @@ abstract class ConfigManager {
 		}
 	}
 	
-	static Config getConfig(String name, File folder, boolean copyFromResourceIfNotCreated){
-		String fileName = name + ".yml";
+	public static Config getConfig(String name, File folder, boolean copyFromResourceIfNotCreated){
+		String fileName = new String(name);
+		if(fileName.endsWith(".yml")) {
+			fileName = fileName + ".yml";
+		}
 		if(folder == null) {
 			folder = mainFolder;
 		}
@@ -41,7 +46,7 @@ abstract class ConfigManager {
 		return new Config(file);
 	}
 	
-	static File createNewFile(String name, String directory){
+	public static File createNewFile(String name, String directory){
 		String fileName = name + ".yml";
 		File folder = getFolder(directory);
 		File file = new File(folder, fileName);
@@ -55,7 +60,7 @@ abstract class ConfigManager {
 		}
 	}
 	
-	static HashMap<String, Config> getAllConfigsFromFolder(String directory){
+	public static HashMap<String, Config> getAllConfigsFromFolder(String directory){
 		HashMap<String, Config> cfgs = new HashMap<String, Config>();
 		File folder = getFolder(directory);
 		String[] files = folder.list();
@@ -70,7 +75,7 @@ abstract class ConfigManager {
 		return cfgs;
 	}
 	
-	static File getFolder(String directory){
+	public static File getFolder(String directory){
 		if(directory != null){
 			File folder = new File(mainFolder+directory);
 			if(!folder.exists()){

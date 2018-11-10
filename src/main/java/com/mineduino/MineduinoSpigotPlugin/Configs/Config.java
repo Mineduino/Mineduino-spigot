@@ -1,4 +1,4 @@
-package com.mineduino.MineduinoSpigotPlugin;
+package com.mineduino.MineduinoSpigotPlugin.Configs;
 
 import java.io.File;
 import java.io.IOException;
@@ -13,13 +13,10 @@ public class Config extends YamlConfiguration{
 		this.file = file;
 		loadConfig();
 	}
-	File getFile(){
+	public File getFile(){
 		return this.file;
 	}
-	void setFile(File file){
-		this.file = file;
-	}
-	boolean loadConfig(){
+	private boolean loadConfig(){
 		try {
 			load(file);
 			return true;
@@ -30,7 +27,7 @@ public class Config extends YamlConfiguration{
 		}
 		
 	}
-	boolean saveConfig(){
+	public boolean saveConfig(){
 		try {
 			save(file);
 			return true;
@@ -39,5 +36,8 @@ public class Config extends YamlConfiguration{
 			ex.printStackTrace();
 			return false;
 		}
+	}
+	public boolean reload() {
+		return loadConfig();
 	}
 }
