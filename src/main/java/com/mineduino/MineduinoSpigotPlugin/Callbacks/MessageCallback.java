@@ -5,6 +5,7 @@
  */
 package com.mineduino.MineduinoSpigotPlugin.Callbacks;
 
+import com.google.gson.Gson;
 import org.bukkit.Bukkit;
 import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
 import org.eclipse.paho.client.mqttv3.MqttCallback;
@@ -19,8 +20,11 @@ import com.mineduino.MineduinoSpigotPlugin.Events.MessageArrivedEvent;
  */
 public class MessageCallback implements MqttCallback {
 	
-	MineduinoSpigotPlugin plugin = MineduinoSpigotPlugin.instance;
+    MineduinoSpigotPlugin plugin = MineduinoSpigotPlugin.instance;
+    private Gson gson = new Gson();
 
+    private Recognizer recognizer = new MessageRecognizer();
+    
     @Override
     public void connectionLost(Throwable thrwbl) {
         
@@ -29,8 +33,8 @@ public class MessageCallback implements MqttCallback {
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         plugin.getLogger().info(topic + message.toString());
-        RealToRedstoneEvaluator ev = new MockedRealToRedstone();
-        plugin.getServer().getPluginManager().callEvent(new MessageArrivedEvent(ev, topic));
+        int signalStrength = recognizer.recognizeAndEvaluate(message.toString());
+        plugin.getServer().getPluginManager().callEvent(new MessageArrivedEvent(signalStrength, topic));
     }
 
     @Override

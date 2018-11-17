@@ -7,12 +7,12 @@ import org.bukkit.event.Cancellable;
 
 public final class MessageArrivedEvent extends Event {
 
-    private RealToRedstoneEvaluator evaluator;
+    private int signalStrength;
     private String topic;
     private final static HandlerList handlers = new HandlerList();
 
-    public MessageArrivedEvent(RealToRedstoneEvaluator evaluator, String topic) {
-        this.evaluator = evaluator;
+    public MessageArrivedEvent(int signalStrength, String topic) {
+        this.signalStrength = signalStrength;
         this.topic = topic;
     }
 
@@ -25,8 +25,8 @@ public final class MessageArrivedEvent extends Event {
 	return handlers;
     }
 
-    public RealToRedstoneEvaluator getEvaluator() {
-        return evaluator;
+    public int getSignalStrength() {
+        return signalStrength;
     }
 
     public String getTopic() {

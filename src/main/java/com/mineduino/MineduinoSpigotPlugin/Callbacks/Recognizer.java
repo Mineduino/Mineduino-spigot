@@ -9,11 +9,7 @@ package com.mineduino.MineduinoSpigotPlugin.Callbacks;
  *
  * @author adam
  */
-public class MockedRealToRedstone implements RealToRedstoneEvaluator{
-
-    @Override
-    public int getRedstoneSignalPower() {
-        return 10;
-    }
-    
+public interface Recognizer {
+    public MessageType recognize(String message);
+    public int recognizeAndEvaluate(String message);
 }

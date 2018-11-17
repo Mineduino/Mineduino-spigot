@@ -5,10 +5,12 @@
  */
 package com.mineduino.MineduinoSpigotPlugin.Callbacks;
 
+import java.util.Map;
+
 /**
  *
  * @author adam
  */
 public interface RealToRedstoneEvaluator {
-    public int getRedstoneSignalPower();
+    public int getRedstoneSignalPower(Map message);
 }
