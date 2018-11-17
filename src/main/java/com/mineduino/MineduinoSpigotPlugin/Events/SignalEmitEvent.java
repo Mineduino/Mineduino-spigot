@@ -15,7 +15,7 @@ public class SignalEmitEvent extends Event implements Cancellable{
 	private int oldPower;
 	private int power;
 	
-	private final HandlerList handlers = new HandlerList();
+	private final static HandlerList handlers = new HandlerList();
 	
 	public SignalEmitEvent(OutputTriggerBlock output, Block firstWireBlock, int oldPower, int power) {
 		this.output = output;
@@ -38,6 +38,10 @@ public class SignalEmitEvent extends Event implements Cancellable{
 	public HandlerList getHandlers() {
 		return handlers;
 	}
+        
+        public static HandlerList getHandlerList() {
+            return handlers;
+        }
 	
 	public OutputTriggerBlock getOutputBlock() {
 		return this.output;
