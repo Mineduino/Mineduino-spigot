@@ -11,7 +11,7 @@ import org.eclipse.paho.client.mqttv3.MqttCallback;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.mineduino.MineduinoSpigotPlugin.MineduinoSpigotPlugin;
-import com.mineduino.MineduinoSpigotPlugin.Events.MQTTCallbackEvent;
+import com.mineduino.MineduinoSpigotPlugin.Events.MessageArrivedEvent;
 
 /**
  *
@@ -29,7 +29,8 @@ public class MessageCallback implements MqttCallback {
     @Override
     public void messageArrived(String topic, MqttMessage message) throws Exception {
         plugin.getLogger().info(topic + message.toString());
-        plugin.getServer().getPluginManager().callEvent(new MQTTCallbackEvent(topic, message));
+        RealToRedstoneEvaluator ev = new MockedRealToRedstone();
+        plugin.getServer().getPluginManager().callEvent(new MessageArrivedEvent(ev, topic));
     }
 
     @Override

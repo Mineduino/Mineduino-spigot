@@ -8,6 +8,8 @@ import com.mineduino.MineduinoSpigotPlugin.Listeners.BlockPlaceListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.BlockRedstoneListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.MQTTCallbackListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.SignalEmitListener;
+import com.mineduino.MineduinoSpigotPlugin.Utils.Storager;
+import com.mineduino.MineduinoSpigotPlugin.Utils.StoragerInMemory;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -20,20 +22,21 @@ import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
-public class MineduinoSpigotPlugin extends JavaPlugin{
-	
-	public static MineduinoSpigotPlugin instance;
-	public static MainConfig mainCfg;
+public class MineduinoSpigotPlugin extends JavaPlugin {
+
+    public static MineduinoSpigotPlugin instance;
+    public static MainConfig mainCfg;
     public static MqttClient client;
-	
-	@Override
-	public void onEnable() {
-		instance = this;
-		ConfigManager.load();
-		mainCfg = new MainConfig();
+    public static Storager storager;
+    @Override
+    public void onEnable() {
+        this.storager = new StoragerInMemory();
+        instance = this;
+        ConfigManager.load();
+        mainCfg = new MainConfig();
         try {
-        	client = new MqttClient("tcp://dev.mineduino.com:1883", MqttClient.generateClientId(), new MemoryPersistence());
-        	client.connect();
+            client = new MqttClient("tcp://dev.mineduino.com:1883", MqttClient.generateClientId(), new MemoryPersistence());
+            client.connect();
             client.setCallback(new MessageCallback());
         } catch (MqttException ex) {
             Logger.getLogger(MineduinoSpigotPlugin.class.getName()).log(Level.SEVERE, null, ex);
@@ -48,15 +51,19 @@ public class MineduinoSpigotPlugin extends JavaPlugin{
         instance.getServer().getPluginManager().registerEvents(new BlockRedstoneListener(), this);
         instance.getServer().getPluginManager().registerEvents(new MQTTCallbackListener(), this);
         instance.getServer().getPluginManager().registerEvents(new SignalEmitListener(), this);
-	}
-	
-	@Override
-	public void onDisable() {
-		//maybe necessary?
-		try {
-			client.disconnect();
-		} catch (MqttException ex) {
-			ex.printStackTrace();
-		}
-	}
+    }
+
+    @Override
+    public void onDisable() {
+        //maybe necessary?
+        try {
+            client.disconnect();
+        } catch (MqttException ex) {
+            ex.printStackTrace();
+        }
+    }
+    
+    public static Storager getStorager() {
+        return storager;
+    }
 }
