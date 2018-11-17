@@ -17,7 +17,7 @@ public class MQTTCallbackListener implements Listener {
 	public void mqttCallbackListener(MessageArrivedEvent e) {
 		String topic = e.getTopic();
                 int signalPower = e.getSignalStrength();
-                MineduinoSpigotPlugin.instance.getLogger().info(topic + " " + signalPower);
+                //MineduinoSpigotPlugin.instance.getLogger().info(topic + " " + signalPower);
                 Optional<List<OutputTriggerBlock>> associated = MineduinoSpigotPlugin.getStorager().getAllFromTopic(topic);
                 if(associated.isPresent()) {
                     for(OutputTriggerBlock block: associated.get()) {

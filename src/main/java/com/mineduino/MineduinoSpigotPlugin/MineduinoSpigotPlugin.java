@@ -7,9 +7,11 @@ import com.mineduino.MineduinoSpigotPlugin.Listeners.BlockBreakListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.BlockPlaceListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.BlockRedstoneListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.MQTTCallbackListener;
+import com.mineduino.MineduinoSpigotPlugin.Listeners.MQTTPublishListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.SignalEmitListener;
-import com.mineduino.MineduinoSpigotPlugin.Utils.Storager;
-import com.mineduino.MineduinoSpigotPlugin.Utils.StoragerInMemory;
+import com.mineduino.MineduinoSpigotPlugin.Utils.InputStorager;
+import com.mineduino.MineduinoSpigotPlugin.Utils.InputStoragerInMemory;
+import com.mineduino.MineduinoSpigotPlugin.Utils.OutputStoragerInMemory;
 
 import org.bukkit.plugin.java.JavaPlugin;
 
@@ -21,16 +23,20 @@ import org.eclipse.paho.client.mqttv3.MqttClient;
 import org.eclipse.paho.client.mqttv3.MqttException;
 import org.eclipse.paho.client.mqttv3.MqttMessage;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
+import com.mineduino.MineduinoSpigotPlugin.Utils.OutputStorager;
 
 public class MineduinoSpigotPlugin extends JavaPlugin {
 
     public static MineduinoSpigotPlugin instance;
     public static MainConfig mainCfg;
     public static MqttClient client;
-    public static Storager storager;
+    public static OutputStorager storager;
+    public static InputStorager inputStorager;
+    
     @Override
     public void onEnable() {
-        this.storager = new StoragerInMemory();
+        this.storager = new OutputStoragerInMemory();
+        this.inputStorager = new InputStoragerInMemory();
         instance = this;
         ConfigManager.load();
         mainCfg = new MainConfig();
@@ -51,6 +57,7 @@ public class MineduinoSpigotPlugin extends JavaPlugin {
         instance.getServer().getPluginManager().registerEvents(new BlockRedstoneListener(), this);
         instance.getServer().getPluginManager().registerEvents(new MQTTCallbackListener(), this);
         instance.getServer().getPluginManager().registerEvents(new SignalEmitListener(), this);
+        instance.getServer().getPluginManager().registerEvents(new MQTTPublishListener(), this);
     }
 
     @Override
@@ -63,7 +70,17 @@ public class MineduinoSpigotPlugin extends JavaPlugin {
         }
     }
     
-    public static Storager getStorager() {
+    public static OutputStorager getStorager() {
         return storager;
     }
+
+    public static InputStorager getInputStorager() {
+        return inputStorager;
+    }
+
+    public static MqttClient getClient() {
+        return client;
+    }
+    
+    
 }
