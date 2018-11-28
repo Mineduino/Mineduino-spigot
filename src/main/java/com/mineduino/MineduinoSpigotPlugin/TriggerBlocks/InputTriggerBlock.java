@@ -6,12 +6,12 @@ import org.bukkit.block.Block;
 
 public class InputTriggerBlock extends TBlock implements TriggerBlock{
 	
-	public InputTriggerBlock(int ID, Block block, UUID owner) {
+	public InputTriggerBlock(String ID, Block block, UUID owner) {
 		super(ID, block, owner);
 	}
 
 	@Override
-	public int getID() {
+	public String getID() {
 		return this.ID;
 	}
 

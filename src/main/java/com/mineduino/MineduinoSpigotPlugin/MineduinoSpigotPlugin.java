@@ -9,6 +9,7 @@ import com.mineduino.MineduinoSpigotPlugin.Listeners.BlockRedstoneListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.MQTTCallbackListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.MQTTPublishListener;
 import com.mineduino.MineduinoSpigotPlugin.Listeners.SignalEmitListener;
+import com.mineduino.MineduinoSpigotPlugin.TriggerBlocks.TriggerBlocksManager;
 import com.mineduino.MineduinoSpigotPlugin.Utils.InputStorager;
 import com.mineduino.MineduinoSpigotPlugin.Utils.InputStoragerInMemory;
 import com.mineduino.MineduinoSpigotPlugin.Utils.OutputStoragerInMemory;
@@ -52,6 +53,7 @@ public class MineduinoSpigotPlugin extends JavaPlugin {
         } catch (MqttException ex) {
             Logger.getLogger(MineduinoSpigotPlugin.class.getName()).log(Level.SEVERE, null, ex);
         }
+        //TriggerBlocksManager.load();
         instance.getServer().getPluginManager().registerEvents(new BlockBreakListener(), this);
         instance.getServer().getPluginManager().registerEvents(new BlockPlaceListener(), this);
         instance.getServer().getPluginManager().registerEvents(new BlockRedstoneListener(), this);

@@ -1,5 +1,6 @@
 package com.mineduino.MineduinoSpigotPlugin.Listeners;
 
+import org.bukkit.Material;
 import org.bukkit.Sound;
 import org.bukkit.SoundCategory;
 import org.bukkit.block.Block;
@@ -8,13 +9,37 @@ import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
 
+import com.mineduino.MineduinoSpigotPlugin.MineduinoSpigotPlugin;
 import com.mineduino.MineduinoSpigotPlugin.Events.SignalEmitEvent;
 
 public class SignalEmitListener implements Listener {
+	
+	MineduinoSpigotPlugin plugin = MineduinoSpigotPlugin.instance;
 
     @EventHandler(priority = EventPriority.HIGHEST)
     public void signalEmitListener(SignalEmitEvent e) {
         if (!e.isCancelled()) {
+        	Block b = e.getOutputBlock().getBlock();
+        	boolean powered = e.isPoweredAfterEmit();
+            if(powered) {
+            	plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+            		@Override
+            		public void run() {
+            			b.setType(Material.REDSTONE_BLOCK);
+                    	b.getWorld().playSound(b.getLocation(), Sound.BLOCK_BEACON_ACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
+            		}
+            	}, 1);
+            }
+            else {
+            	plugin.getServer().getScheduler().runTaskLater(plugin, new Runnable() {
+            		@Override
+            		public void run() {
+            			b.setType(Material.AIR);
+                    	b.getWorld().playSound(b.getLocation(), Sound.BLOCK_BEACON_DEACTIVATE, SoundCategory.BLOCKS, 1f, 1f);
+            		}
+            	}, 1);
+            }
+            /*
             Block b = e.getOutputBlock().getFirstWireBlock();
             RedstoneWire wire = (RedstoneWire) b.getBlockData();
             int pow = e.getPower();
@@ -28,6 +53,7 @@ public class SignalEmitListener implements Listener {
             } else if (oldpow > 0 && pow > 0) {
                 b.getWorld().playSound(b.getLocation(), Sound.BLOCK_BEACON_AMBIENT, SoundCategory.BLOCKS, 1f, 1f);
             }
+            */
         }
     }
 }

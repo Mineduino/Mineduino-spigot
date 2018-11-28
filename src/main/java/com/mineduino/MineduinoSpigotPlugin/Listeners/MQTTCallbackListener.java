@@ -1,5 +1,6 @@
 package com.mineduino.MineduinoSpigotPlugin.Listeners;
 
+import org.bukkit.block.Block;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
@@ -16,14 +17,19 @@ public class MQTTCallbackListener implements Listener {
 	@EventHandler(priority = EventPriority.MONITOR)
 	public void mqttCallbackListener(MessageArrivedEvent e) {
 		String topic = e.getTopic();
-                int signalPower = e.getSignalStrength();
-                //MineduinoSpigotPlugin.instance.getLogger().info(topic + " " + signalPower);
-                Optional<List<OutputTriggerBlock>> associated = MineduinoSpigotPlugin.getStorager().getAllFromTopic(topic);
-                if(associated.isPresent()) {
-                    for(OutputTriggerBlock block: associated.get()) {
-                        //@TODO - trigger signal with block and signalPower
-                    }
-                }
+		int signalPower = e.getSignalStrength();
+		MineduinoSpigotPlugin.instance.getLogger().info(topic + " " + signalPower);
+		Optional<List<OutputTriggerBlock>> associated = MineduinoSpigotPlugin.getStorager().getAllFromTopic(topic);
+		if(associated.isPresent()) {
+			for(OutputTriggerBlock outblock: associated.get()) {
+				if(signalPower > 0 && !outblock.isPowered()) {
+					outblock.setPower(true);
+				}
+				else if(signalPower == 0 && outblock.isPowered()) {
+					outblock.setPower(false);
+				}
+			}
+		}
 	}
 	
 }

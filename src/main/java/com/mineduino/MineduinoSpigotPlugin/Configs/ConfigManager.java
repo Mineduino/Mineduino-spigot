@@ -37,16 +37,16 @@ public abstract class ConfigManager {
                     return null;
                 }
                 file = new File(folder, fileName);
-            } else if (!file.exists()) {
+            } 
+            else if (!file.exists()) {
                 return null;
             }
         }
         return new Config(file);
     }
 
-    public static File createNewFile(String name, String directory) {
+    public static File createNewFile(String name, File folder) {
         String fileName = name + ".yml";
-        File folder = getFolder(directory);
         File file = new File(folder, fileName);
         try {
             file.createNewFile();
@@ -57,13 +57,9 @@ public abstract class ConfigManager {
         }
     }
 
-    public static HashMap<String, Config> getAllConfigsFromFolder(String directory) {
+    public static HashMap<String, Config> getAllConfigsFromFolder(File folder) {
         HashMap<String, Config> cfgs = new HashMap<String, Config>();
-        File folder = getFolder(directory);
         String[] files = folder.list();
-        if (files.length == 0) {
-            return null;
-        }
         for (String fs : files) {
             String s = fs.replaceAll(".yml", "");
             Config cfg = getConfig(s, folder, false);

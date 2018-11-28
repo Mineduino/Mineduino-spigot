@@ -11,17 +11,13 @@ public class SignalEmitEvent extends Event implements Cancellable{
 	
 	private boolean cancelled = false;
 	private OutputTriggerBlock output;
-	private Block firstWireBlock;
-	private int oldPower;
-	private int power;
+	private boolean powered;
 	
 	private final static HandlerList handlers = new HandlerList();
 	
-	public SignalEmitEvent(OutputTriggerBlock output, Block firstWireBlock, int oldPower, int power) {
+	public SignalEmitEvent(OutputTriggerBlock output, boolean powered) {
 		this.output = output;
-		this.firstWireBlock = firstWireBlock;
-		this.oldPower = oldPower;
-		this.power = power;
+		this.powered = powered;
 	}
 
 	@Override
@@ -47,21 +43,11 @@ public class SignalEmitEvent extends Event implements Cancellable{
 		return this.output;
 	}
 	
-	public Block getFirstWireBlock() {
-		return this.firstWireBlock;
+	public boolean isPoweredAfterEmit() {
+		return this.powered;
 	}
 	
-	public int getOldPower() {
-		return this.oldPower;
+	public void setPowered(boolean powered) {
+		this.powered = powered;
 	}
-	
-	public int getPower() {
-		return this.power;
-	}
-	
-	public void setPower(int power) {
-		this.power = power;
-	}
-	
-	
 }

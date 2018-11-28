@@ -6,11 +6,11 @@ import org.bukkit.block.Block;
 
 class TBlock {
 	
-	protected int ID;
+	protected String ID;
 	protected Block block;
 	protected UUID owner;
 	
-	TBlock(int ID, Block block, UUID owner){
+	TBlock(String ID, Block block, UUID owner){
 		this.ID = ID;
 		this.block = block;
 		this.owner = owner;

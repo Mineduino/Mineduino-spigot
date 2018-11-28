@@ -16,7 +16,7 @@ public class Switch implements RealToRedstoneEvaluator{
 
     @Override
     public int getRedstoneSignalPower(Map message) {
-        return ((Boolean) message.get("value")) ? 16 : 0;
+        return ((Boolean) message.get("value")) ? 15 : 0;
     }
     
 }

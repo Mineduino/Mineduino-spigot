@@ -6,7 +6,7 @@ import org.bukkit.block.Block;
 
 public interface TriggerBlock {
 	
-	public int getID();
+	public String getID();
 	public Block getBlock();
 	public UUID getOwner();
 	
