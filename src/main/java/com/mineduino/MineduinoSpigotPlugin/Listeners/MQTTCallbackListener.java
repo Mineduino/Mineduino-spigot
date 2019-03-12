@@ -8,9 +8,10 @@ import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 import com.mineduino.MineduinoSpigotPlugin.Events.MessageArrivedEvent;
 import com.mineduino.MineduinoSpigotPlugin.MineduinoSpigotPlugin;
-import com.mineduino.MineduinoSpigotPlugin.TriggerBlocks.OutputTriggerBlock;
 import java.util.List;
 import java.util.Optional;
+import org.bukkit.Bukkit;
+import org.bukkit.Material;
 
 public class MQTTCallbackListener implements Listener {
 	
@@ -19,17 +20,22 @@ public class MQTTCallbackListener implements Listener {
 		String topic = e.getTopic();
 		int signalPower = e.getSignalStrength();
 		MineduinoSpigotPlugin.instance.getLogger().info(topic + " " + signalPower);
-		Optional<List<OutputTriggerBlock>> associated = MineduinoSpigotPlugin.getStorager().getAllFromTopic(topic);
-		if(associated.isPresent()) {
-			for(OutputTriggerBlock outblock: associated.get()) {
-				if(signalPower > 0 && !outblock.isPowered()) {
-					outblock.setPower(true);
-				}
-				else if(signalPower == 0 && outblock.isPowered()) {
-					outblock.setPower(false);
-				}
-			}
-		}
+		Optional<List<Block>> associated = MineduinoSpigotPlugin.getOutputStorager().getAllFromTopic(topic);
+                System.out.println(associated);
+                if(associated.isPresent()) {
+                    for(Block block: associated.get()) {
+                        if(signalPower > 0) {
+                            Bukkit.getScheduler().runTask(MineduinoSpigotPlugin.instance, () -> {
+                                block.setType(Material.REDSTONE_BLOCK);
+                            });
+                        } else {
+                            Bukkit.getScheduler().runTask(MineduinoSpigotPlugin.instance, () -> {
+                                block.setType(Material.IRON_BLOCK);
+                            });
+                            
+                        }
+                    }
+                }
 	}
 	
 }

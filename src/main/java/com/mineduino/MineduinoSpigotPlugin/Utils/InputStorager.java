@@ -5,7 +5,6 @@
  */
 package com.mineduino.MineduinoSpigotPlugin.Utils;
 
-import com.mineduino.MineduinoSpigotPlugin.TriggerBlocks.OutputTriggerBlock;
 import java.util.List;
 import java.util.Optional;
 import org.bukkit.block.Block;

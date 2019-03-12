@@ -5,17 +5,17 @@
  */
 package com.mineduino.MineduinoSpigotPlugin.Utils;
 
-import com.mineduino.MineduinoSpigotPlugin.TriggerBlocks.OutputTriggerBlock;
 import java.util.List;
 import java.util.Optional;
+import org.bukkit.block.Block;
 
 /**
  *
  * @author adam
  */
 public interface OutputStorager {
-    public void replaceWith(String topic, List<OutputTriggerBlock> blocks);
-    public void add(String topic, OutputTriggerBlock ... blocks);
-    public void remove(String topic, OutputTriggerBlock ... blocks);
-    public Optional<List<OutputTriggerBlock>> getAllFromTopic(String topic);
+    public void replaceWith(String topic, List<Block> topics);
+    public void add(String topic, Block ... topics);
+    public void remove(String topic, Block ... topics);
+    public Optional<List<Block>> getAllFromTopic(String topic);
 }

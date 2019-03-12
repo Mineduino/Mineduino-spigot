@@ -5,7 +5,6 @@
  */
 package com.mineduino.MineduinoSpigotPlugin.Utils;
 
-import com.mineduino.MineduinoSpigotPlugin.TriggerBlocks.OutputTriggerBlock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;

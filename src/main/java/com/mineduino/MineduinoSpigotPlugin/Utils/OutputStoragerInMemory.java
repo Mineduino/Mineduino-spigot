@@ -5,13 +5,13 @@
  */
 package com.mineduino.MineduinoSpigotPlugin.Utils;
 
-import com.mineduino.MineduinoSpigotPlugin.TriggerBlocks.OutputTriggerBlock;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
+import org.bukkit.block.Block;
 
 /**
  *
@@ -19,38 +19,38 @@ import java.util.Optional;
  */
 
 public class OutputStoragerInMemory implements OutputStorager{
-    private Map<String, List<OutputTriggerBlock>> memoryMap;
+    private Map<String, List<Block>> memoryMap;
     
     public OutputStoragerInMemory() {
         this.memoryMap = new HashMap<>();
     }
 
     @Override
-    public void replaceWith(String topic, List<OutputTriggerBlock> blocks) {
+    public void replaceWith(String topic, List<Block> blocks) {
         this.memoryMap.put(topic, blocks);
     }
 
     @Override
-    public void add(String topic, OutputTriggerBlock... blocks) {
+    public void add(String topic, Block... blocks) {
         if(!memoryMap.containsKey(topic)) {
             memoryMap.put(topic, new ArrayList<>());
         }
-        List<OutputTriggerBlock> associated = memoryMap.get(topic);
-        for(OutputTriggerBlock block: blocks) {
+        List<Block> associated = memoryMap.get(topic);
+        for(Block block: blocks) {
             associated.add(block);
         }
     }
 
     @Override
-    public void remove(String topic, OutputTriggerBlock... blocks) {
+    public void remove(String topic, Block... blocks) {
         if(!memoryMap.containsKey(topic)) {
             return;
         }
        
-        Iterator<OutputTriggerBlock> associatedIterator = memoryMap.get(topic).iterator();
+        Iterator<Block> associatedIterator = memoryMap.get(topic).iterator();
         while(associatedIterator.hasNext()) {
-            OutputTriggerBlock checked = associatedIterator.next();
-            for(OutputTriggerBlock block: blocks) {
+            Block checked = associatedIterator.next();
+            for(Block block: blocks) {
                 if(block.equals(checked)) {
                     associatedIterator.remove();
                     break;
@@ -61,7 +61,7 @@ public class OutputStoragerInMemory implements OutputStorager{
     }
 
     @Override
-    public Optional<List<OutputTriggerBlock>> getAllFromTopic(String topic) {
+    public Optional<List<Block>> getAllFromTopic(String topic) {
         if(!memoryMap.containsKey(topic)) {
             return Optional.empty();
         }
