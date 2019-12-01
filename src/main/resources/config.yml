@@ -1,8 +1,0 @@
-InputTriggerBlockMaterial: "IRON_BLOCK"
-InputTriggerBlockItemData:
-  name: "&cInputTriggerBlockItem"
-  lore: "&7Place and rightclick to open menu."
-OutputTriggerBlockMaterial: "GOLD_BLOCK"
-OutputTriggerBlockItemData:
-  name: "&aOutputTriggerBlockItem"
-  lore: "&7Place and rightclick to open menu."
