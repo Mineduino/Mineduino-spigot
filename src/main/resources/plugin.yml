@@ -1,4 +1,4 @@
-name: MineduinoSpigotPlugin
-main: com.mineduino.MineduinoSpigotPlugin.MineduinoSpigotPlugin
-author: Mineduino
-version: 1.0 
+name: MineduinoPlugin
+version: 0.1
+main: eu.razniewski.mineduino.MineduinoPlugin
+api-version: 1.13
