@@ -32,7 +32,7 @@ public class JsonConfigLocator implements Locator{
 
     @Override
     public Optional<Location> getLocationFor(String identifier, String type) {
-        return Optional.ofNullable(cache.getOrDefault(identifier, null));
+        return Optional.ofNullable(cache.getOrDefault(makeDefaultKey(identifier, type), null));
     }
 
     @Override
