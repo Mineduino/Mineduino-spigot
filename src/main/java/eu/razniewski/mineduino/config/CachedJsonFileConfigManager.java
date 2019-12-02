@@ -14,6 +14,7 @@ import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 import java.util.Optional;
+import java.util.function.Predicate;
 
 public class CachedJsonFileConfigManager implements ConfigManager{
 
@@ -59,6 +60,27 @@ public class CachedJsonFileConfigManager implements ConfigManager{
     @Override
     public <T extends Serializable> boolean isValueExists(T value) {
         return this.cache.containsValue(value);
+    }
+
+    @Override
+    public <T extends Serializable> Optional<String> getValueKeyIfExists(T value) {
+
+        for (Map.Entry<String, Object> entry : this.cache.entrySet()) {
+            if (entry.getValue().equals(value)) {
+                return Optional.of(entry.getKey());
+            }
+        }
+        return Optional.empty();
+    }
+
+    @Override
+    public <T extends Serializable> Optional<String> getValueKeyIfPrediction(Predicate<Object> predicate) {
+        for (Map.Entry<String, Object> entry : this.cache.entrySet()) {
+            if(predicate.test(entry.getValue())) {
+                return Optional.of(entry.getKey());
+            }
+        }
+        return Optional.empty();
     }
 
     private void dumpCache() {

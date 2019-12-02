@@ -1,5 +1,6 @@
 package eu.razniewski.mineduino.connector;
 
+import com.google.common.primitives.Ints;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -50,6 +51,17 @@ public class MqttHandler {
         }
         try {
             this.client.publish(topic, new MqttMessage(message.getBytes(Charset.forName("UTF-8"))));
+            return true;
+        } catch (MqttException e) {
+            return false;
+        }
+    }
+    public boolean standardPublish(String topic, byte value) {
+        if(this.client == null) {
+            throw new IllegalStateException("First of all connect to broker");
+        }
+        try {
+            this.client.publish(topic, new MqttMessage(new byte[]{value}));
             return true;
         } catch (MqttException e) {
             return false;

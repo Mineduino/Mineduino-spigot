@@ -31,16 +31,18 @@ public class ChestPlacerListener implements Listener {
                 if(!parsed.isPresent()) {
                     return;
                 }
-                String identifier = parsed.get().getIdentifier();
-                String type = parsed.get().getType();
-                Locator locator = MineduinoPlugin.getInstance().getLocator();
-                if(!locator.isExists(identifier, type)) {
-                    e.getPlayer().sendMessage("[MD] Simple input chest created!");
-                    locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
-                } else {
-                    e.getPlayer().sendMessage("[MD] This identifier and type already exists!");
-                    e.setCancelled(true);
-                    return;
+                if(parsed.get().getInputoutputindicator().equals("i")) {
+                    String identifier = parsed.get().getIdentifier();
+                    String type = parsed.get().getType();
+                    Locator locator = MineduinoPlugin.getInstance().getLocator();
+                    if (!locator.isExists(identifier, type)) {
+                        e.getPlayer().sendMessage("[MD] Simple input chest created!");
+                        locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
+                    } else {
+                        e.getPlayer().sendMessage("[MD] This identifier and type already exists!");
+                        e.setCancelled(true);
+                        return;
+                    }
                 }
 
             }

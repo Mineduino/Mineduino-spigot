@@ -9,6 +9,9 @@ public interface Locator {
     void setLocationFor(String identifier, String type, Location location);
     boolean isExists(String identifier, String type);
     boolean delete(String identifier, String type);
+    boolean delete(String key);
     boolean removeAll(Location loc);
     boolean isLocationExists(Location loc);
+    Optional<String> getKeyIfValueExists(Location loc);
+
 }
