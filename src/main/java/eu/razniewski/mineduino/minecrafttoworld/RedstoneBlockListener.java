@@ -15,7 +15,7 @@ public class RedstoneBlockListener implements Listener {
         Optional<String> topic = locator.getKeyIfValueExists(e.getBlock().getLocation());
         if(topic.isPresent()){
             String[] parsed = topic.get().split(";");
-            String forTopic = "MD/" + parsed[0] + "/o/" + parsed[1];
+            String forTopic = "MD/" + parsed[0] + "/" + parsed[1];
             MineduinoPlugin.getMqttHandler().standardPublish(forTopic, (byte) e.getNewCurrent());
         }
     }

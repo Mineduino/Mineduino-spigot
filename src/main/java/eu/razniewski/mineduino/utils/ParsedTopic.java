@@ -6,13 +6,11 @@ import java.util.Optional;
 public class ParsedTopic {
     private String prefix;
     private String identifier;
-    private String inputoutputindicator;
     private String type;
 
-    public ParsedTopic(String prefix, String identifier, String inputoutputindicator, String type) {
+    public ParsedTopic(String prefix, String identifier, String type) {
         this.prefix = prefix;
         this.identifier = identifier;
-        this.inputoutputindicator = inputoutputindicator;
         this.type = type;
     }
 
@@ -24,10 +22,6 @@ public class ParsedTopic {
         return identifier;
     }
 
-    public String getInputoutputindicator() {
-        return inputoutputindicator;
-    }
-
     public String getType() {
         return type;
     }
@@ -35,10 +29,10 @@ public class ParsedTopic {
     public static Optional<ParsedTopic> from(String topic) {
 
         String[] data = topic.split("/");
-        if(data.length < 4) {
+        if(data.length < 3) {
             return Optional.empty();
         }
-        return Optional.of(new ParsedTopic(data[0], data[1], data[2], data[3]));
+        return Optional.of(new ParsedTopic(data[0], data[1], data[2]));
     }
 
     @Override
@@ -48,13 +42,12 @@ public class ParsedTopic {
         ParsedTopic that = (ParsedTopic) o;
         return Objects.equals(prefix, that.prefix) &&
                 Objects.equals(identifier, that.identifier) &&
-                Objects.equals(inputoutputindicator, that.inputoutputindicator) &&
                 Objects.equals(type, that.type);
     }
 
     @Override
     public int hashCode() {
-        return Objects.hash(prefix, identifier, inputoutputindicator, type);
+        return Objects.hash(prefix, identifier, type);
     }
 
     @Override
@@ -62,7 +55,6 @@ public class ParsedTopic {
         return "ParsedTopic{" +
                 "prefix='" + prefix + '\'' +
                 ", identifier='" + identifier + '\'' +
-                ", inputoutputindicator='" + inputoutputindicator + '\'' +
                 ", type='" + type + '\'' +
                 '}';
     }

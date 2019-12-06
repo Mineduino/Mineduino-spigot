@@ -13,31 +13,36 @@ import java.io.PrintWriter;
 import java.lang.reflect.Type;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.HashMap;
-import java.util.Map;
-import java.util.Optional;
+import java.util.*;
 
 public class JsonConfigLocator implements Locator{
-    private HashBiMap<String, Location> cache;
+    private HashBiMap<String, ArrayList<Location>> cache;
     private String configLoc = "locator.json";
     private Gson gson;
 
     public JsonConfigLocator() {
         LocationSerializer serializer = new LocationSerializer();
         this.gson = new GsonBuilder().setPrettyPrinting()
-                .registerTypeAdapter(new TypeToken<HashBiMap<String, Location>>(){}.getType(), new HashBiMapSerializer())
+                .registerTypeAdapter(new TypeToken<HashBiMap<String, ArrayList<Location>>>(){}.getType(), new HashBiMapSerializer())
                 .registerTypeAdapter(Location.class, serializer).create();
         this.loadFromCache();
     }
 
     @Override
-    public Optional<Location> getLocationFor(String identifier, String type) {
-        return Optional.ofNullable(cache.getOrDefault(makeDefaultKey(identifier, type), null));
+    public Optional<Location[]> getLocationFor(String identifier, String type) {
+        Location[] arr = cache.getOrDefault(makeDefaultKey(identifier, type), new ArrayList<>()).toArray(new Location[0]);
+        return Optional.of(arr);
     }
 
     @Override
     public void setLocationFor(String identifier, String type, Location location) {
-        this.cache.put(makeDefaultKey(identifier, type), location);
+        String key = makeDefaultKey(identifier, type);
+        if(this.cache.containsKey(key)) {
+            this.cache.get(key).add(location);
+        } else {
+            ArrayList<Location> newArr = new ArrayList<>(Arrays.asList(location));
+            this.cache.put(key, newArr);
+        }
         this.dumpCache();
 
     }
@@ -63,9 +68,14 @@ public class JsonConfigLocator implements Locator{
 
     @Override
     public boolean removeAll(Location loc) {
-        this.cache.entrySet().removeIf(obj -> obj.getValue().equals(loc));
+        boolean ret = false;
+        for (Map.Entry<String, ArrayList<Location>> entry: this.cache.entrySet()) {
+            if(entry.getValue().remove(loc)) {
+                ret = true;
+            }
+        }
         this.dumpCache();
-        return true;
+        return ret;
     }
 
     @Override
@@ -75,7 +85,13 @@ public class JsonConfigLocator implements Locator{
 
     @Override
     public Optional<String> getKeyIfValueExists(Location loc) {
-        return Optional.ofNullable(this.cache.inverse().getOrDefault(loc, null));
+        Optional<String> empty = Optional.empty();
+        for(Map.Entry<ArrayList<Location>, String> entry: this.cache.inverse().entrySet()) {
+            if(entry.getKey().contains(loc)) {
+                return Optional.of(entry.getValue());
+            }
+        }
+        return empty;
     }
 
     private String makeDefaultKey(String i, String t) {
@@ -93,7 +109,7 @@ public class JsonConfigLocator implements Locator{
         try {
             String contents = new String(Files.readAllBytes(Paths.get(configLoc)));
 
-            this.cache = gson.fromJson(contents, new TypeToken<HashBiMap<String, Location>>(){}.getType());
+            this.cache = gson.fromJson(contents, new TypeToken<HashBiMap<String, ArrayList<Location>>>(){}.getType());
         } catch (IOException e) {
             this.cache = HashBiMap.create();
         }
@@ -113,21 +129,21 @@ class LocationSerializer implements JsonSerializer<Location>, JsonDeserializer<L
         return Location.deserialize(obj);
     }
 }
-class HashBiMapSerializer implements JsonSerializer<HashBiMap<String, Location>>, JsonDeserializer<HashBiMap<String, Location>> {
+class HashBiMapSerializer implements JsonSerializer<HashBiMap<String, ArrayList<Location>>>, JsonDeserializer<HashBiMap<String, ArrayList<Location>>> {
 
     @Override
-    public HashBiMap<String, Location> deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
-        HashBiMap<String, Location> hashBiMap = HashBiMap.create();
+    public HashBiMap<String, ArrayList<Location>> deserialize(JsonElement jsonElement, Type type, JsonDeserializationContext jsonDeserializationContext) throws JsonParseException {
+        HashBiMap<String, ArrayList<Location>> hashBiMap = HashBiMap.create();
         JsonObject obj = jsonElement.getAsJsonObject();
         obj.entrySet().forEach((entry) -> {
-            hashBiMap.put(entry.getKey(), jsonDeserializationContext.deserialize(entry.getValue(), Location.class));
+            hashBiMap.put(entry.getKey(), jsonDeserializationContext.deserialize(entry.getValue(), new TypeToken<ArrayList<Location>>(){}.getType()));
 
         });
         return hashBiMap;
     }
 
     @Override
-    public JsonElement serialize(HashBiMap<String, Location> stringLocationHashBiMap, Type type, JsonSerializationContext jsonSerializationContext) {
+    public JsonElement serialize(HashBiMap<String, ArrayList<Location>> stringLocationHashBiMap, Type type, JsonSerializationContext jsonSerializationContext) {
         JsonObject obj = new JsonObject();
         stringLocationHashBiMap.forEach((key, value) -> {
             obj.add(key, jsonSerializationContext.serialize(value));

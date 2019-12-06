@@ -16,11 +16,8 @@ public class OutputerBlockBreakListener implements Listener {
     @EventHandler
     public void onBlockDestroy(BlockBreakEvent e) {
         Locator loc = MineduinoPlugin.getInstance().getLocator();
-        Optional<String> key = loc.getKeyIfValueExists(e.getBlock().getLocation());
-        if(key.isPresent()) {
-            loc.delete(key.get());
-            e.getPlayer().sendMessage("[MD] Output block deleted!");
-
+        if(loc.removeAll(e.getBlock().getLocation())) {
+            e.getPlayer().sendMessage("[MD] Location removed!");
         }
     }
 }

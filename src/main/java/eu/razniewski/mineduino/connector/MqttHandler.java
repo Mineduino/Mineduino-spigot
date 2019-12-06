@@ -18,7 +18,7 @@ public class MqttHandler {
                 @Override
                 public void onSuccess(IMqttToken iMqttToken) {
                     try {
-                        client.subscribe("MD/+/i/+", 0);
+                        client.subscribe("MD/#", 0);
                     } catch (MqttException e) {
                         e.printStackTrace();
                     }

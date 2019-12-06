@@ -29,11 +29,12 @@ public class SimpleEvaluator implements Consumer<MineduinoMessageEvent> {
         if(!parsed.isPresent()) {
             return;
         }
-        Optional<Location> chestLoc = MineduinoPlugin.getInstance().getLocator().getLocationFor(parsed.get().getIdentifier(), parsed.get().getType());
+        Optional<Location[]> chestLoc = MineduinoPlugin.getInstance().getLocator().getLocationFor(parsed.get().getIdentifier(), parsed.get().getType());
         if(chestLoc.isPresent()) {
-            Location loc = chestLoc.get();
-            int value = fromByteArray(mineduinoMessageEvent.getMessage());
-            Bukkit.getScheduler().runTask(MineduinoPlugin.getInstance(), new SetProperItemsRunnable(loc, value));
+            for(Location loc: chestLoc.get()){
+                int value = fromByteArray(mineduinoMessageEvent.getMessage());
+                Bukkit.getScheduler().runTask(MineduinoPlugin.getInstance(), new SetProperItemsRunnable(loc, value));
+            }
         } else {
             MineduinoPlugin.getInstance().getLogger().warning("[SIMPLE] No location for: " + parsed.get().getIdentifier());
         }

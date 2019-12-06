@@ -24,25 +24,29 @@ public class ChestPlacerListener implements Listener {
         } else if (e.getHand() == EquipmentSlot.OFF_HAND) {
             is = e.getPlayer().getInventory().getItemInOffHand();
         }
-        if (is != null && is.getType().equals(Material.CHEST)) {
+        if (is != null) {
             if (is.hasItemMeta() && is.getItemMeta().hasDisplayName() && is.getItemMeta().getDisplayName().startsWith("MD/")) {
-
-                Optional<ParsedTopic> parsed = ParsedTopic.from(is.getItemMeta().getDisplayName());
-                if(!parsed.isPresent()) {
-                    return;
-                }
-                if(parsed.get().getInputoutputindicator().equals("i")) {
+                if(is.getType().equals(Material.CHEST)) {
+                    Optional<ParsedTopic> parsed = ParsedTopic.from(is.getItemMeta().getDisplayName());
+                    if (!parsed.isPresent()) {
+                        return;
+                    }
                     String identifier = parsed.get().getIdentifier();
                     String type = parsed.get().getType();
                     Locator locator = MineduinoPlugin.getInstance().getLocator();
-                    if (!locator.isExists(identifier, type)) {
-                        e.getPlayer().sendMessage("[MD] Simple input chest created!");
-                        locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
-                    } else {
-                        e.getPlayer().sendMessage("[MD] This identifier and type already exists!");
-                        e.setCancelled(true);
+                    e.getPlayer().sendMessage("[MD] Simple input chest created! Topic: MD/" + identifier + "/" + type);
+                    locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
+                } else if(is.getType().equals(Material.IRON_BLOCK)) {
+                    Optional<ParsedTopic> parsed = ParsedTopic.from(is.getItemMeta().getDisplayName());
+                    if (!parsed.isPresent()) {
                         return;
                     }
+                    String identifier = parsed.get().getIdentifier();
+                    String type = parsed.get().getType();
+                    Locator locator = MineduinoPlugin.getInstance().getLocator();
+                    e.getPlayer().sendMessage("[MD] Raw input created! Topic: MD/" + identifier + "/" + type);
+                    locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
+
                 }
 
             }
