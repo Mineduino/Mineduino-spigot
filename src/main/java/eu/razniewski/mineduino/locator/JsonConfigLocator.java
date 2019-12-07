@@ -69,10 +69,17 @@ public class JsonConfigLocator implements Locator{
     @Override
     public boolean removeAll(Location loc) {
         boolean ret = false;
-        for (Map.Entry<String, ArrayList<Location>> entry: this.cache.entrySet()) {
+
+        Iterator<Map.Entry<String, ArrayList<Location>>> entryIterator = this.cache.entrySet().iterator();
+        while(entryIterator.hasNext()) {
+            Map.Entry<String, ArrayList<Location>> entry = entryIterator.next();
             if(entry.getValue().remove(loc)) {
                 ret = true;
             }
+            if(entry.getValue().isEmpty()) {
+                entryIterator.remove();
+            }
+
         }
         this.dumpCache();
         return ret;
