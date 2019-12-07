@@ -1,6 +1,7 @@
 package eu.razniewski.mineduino.connector;
 
 import com.google.common.primitives.Ints;
+import eu.razniewski.mineduino.MineduinoPlugin;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
 
@@ -23,12 +24,12 @@ public class MqttHandler {
                         e.printStackTrace();
                     }
                     client.setCallback(new MqttToEventCallback());
-                    System.out.println("FULLY CONNECTED TO MINEDUINO");
+                    MineduinoPlugin.getInstance().getLogger().info("FULLY CONNECTED TO MINEDUINO!");
                 }
 
                 @Override
                 public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-                    System.out.println("FAILED TO CONNECT TO MINEDUINO");
+                    MineduinoPlugin.getInstance().getLogger().info("FAILED TO CONNECT TO MINEDUINO!");
                 }
             });
             return true;
@@ -50,7 +51,10 @@ public class MqttHandler {
             throw new IllegalStateException("First of all connect to broker");
         }
         try {
-            this.client.publish(topic, new MqttMessage(message.getBytes(Charset.forName("UTF-8"))));
+
+            MqttMessage mqttMessage = new MqttMessage(message.getBytes(Charset.forName("UTF-8")));
+            mqttMessage.setRetained(true);
+            this.client.publish(topic, mqttMessage);
             return true;
         } catch (MqttException e) {
             return false;
@@ -61,7 +65,9 @@ public class MqttHandler {
             throw new IllegalStateException("First of all connect to broker");
         }
         try {
-            this.client.publish(topic, new MqttMessage(new byte[]{value}));
+            MqttMessage message = new MqttMessage(new byte[]{value});
+            message.setRetained(true);
+            this.client.publish(topic, message);
             return true;
         } catch (MqttException e) {
             return false;
