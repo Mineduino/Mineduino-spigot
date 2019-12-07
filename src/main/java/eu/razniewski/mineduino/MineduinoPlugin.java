@@ -25,7 +25,7 @@ public class MineduinoPlugin extends JavaPlugin {
         manager = new CachedJsonFileConfigManager("mineduino.json");
         this.locator = new JsonConfigLocator();
         if(!manager.<Double>getValue("version").isPresent()) {
-            manager.setValue("broker", "tcp://mineduino.com:1883");
+            manager.setValue("broker", "tcp://mineduino.eu:1883");
             manager.setValue("version", 0.1);
         }
         this.mqttHandler = new MqttHandler();
