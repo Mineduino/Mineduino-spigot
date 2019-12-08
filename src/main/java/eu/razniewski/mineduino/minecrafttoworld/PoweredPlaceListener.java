@@ -41,7 +41,7 @@ public class PoweredPlaceListener implements Listener {
                     String type = parsed.get().getType();
                     Locator locator = MineduinoPlugin.getInstance().getLocator();
                     locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
-                    e.getPlayer().sendMessage("[MD] Simple output created! Topic: " + "MD/" + identifier + "/" + type);
+                    e.getPlayer().sendMessage("[MD] Output created! Topic: " + "MD/" + identifier + "/" + type);
                 }
             }
         }

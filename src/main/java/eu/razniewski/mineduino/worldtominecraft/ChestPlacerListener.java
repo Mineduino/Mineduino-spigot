@@ -47,6 +47,18 @@ public class ChestPlacerListener implements Listener {
                     e.getPlayer().sendMessage("[MD] Raw input created! Topic: MD/" + identifier + "/" + type);
                     locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
 
+                } else if(is.getType().equals(Material.STONE)) {
+                    Optional<ParsedTopic> parsed = ParsedTopic.from(is.getItemMeta().getDisplayName());
+                    if (!parsed.isPresent()) {
+                        return;
+                    }
+                    String identifier = parsed.get().getIdentifier();
+                    String type = parsed.get().getType();
+                    if(type.equals("hidden")) {
+                        Locator locator = MineduinoPlugin.getInstance().getLocator();
+                        e.getPlayer().sendMessage("[MD] Hidden block created! Topic: MD/" + identifier + "/" + type);
+                        locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
+                    }
                 }
 
             }

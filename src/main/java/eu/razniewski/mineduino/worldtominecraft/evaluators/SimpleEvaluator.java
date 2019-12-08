@@ -20,7 +20,7 @@ import java.util.function.Function;
 
 public class SimpleEvaluator implements Consumer<MineduinoMessageEvent> {
     int fromByteArray(byte[] bytes) {
-        return Integer.parseInt(new String(bytes));
+        return bytes[0];
     }
     @Override
     public void accept(MineduinoMessageEvent mineduinoMessageEvent) {

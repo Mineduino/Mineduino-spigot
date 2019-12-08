@@ -2,6 +2,7 @@ package eu.razniewski.mineduino.worldtominecraft;
 
 import eu.razniewski.mineduino.MineduinoPlugin;
 import eu.razniewski.mineduino.connector.MineduinoMessageEvent;
+import eu.razniewski.mineduino.worldtominecraft.evaluators.HiddenEvaluator;
 import eu.razniewski.mineduino.worldtominecraft.evaluators.RawEvaluator;
 import eu.razniewski.mineduino.worldtominecraft.evaluators.SimpleEvaluator;
 
@@ -15,6 +16,7 @@ public class EvaluatorManager {
     static  {
         evaluators.put("simple", new SimpleEvaluator());
         evaluators.put("raw", new RawEvaluator());
+        evaluators.put("hidden", new HiddenEvaluator());
     }
 
 
