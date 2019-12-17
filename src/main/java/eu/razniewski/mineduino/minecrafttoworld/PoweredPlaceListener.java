@@ -4,6 +4,8 @@ import eu.razniewski.mineduino.MineduinoPlugin;
 import eu.razniewski.mineduino.locator.Locator;
 import eu.razniewski.mineduino.utils.ParsedTopic;
 import org.bukkit.Material;
+import org.bukkit.block.Block;
+import org.bukkit.block.Container;
 import org.bukkit.block.data.AnaloguePowerable;
 import org.bukkit.block.data.BlockData;
 import org.bukkit.block.data.Powerable;
@@ -42,10 +44,27 @@ public class PoweredPlaceListener implements Listener {
                     Locator locator = MineduinoPlugin.getInstance().getLocator();
                     locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
                     e.getPlayer().sendMessage("[MD] Output created! Topic: " + "MD/" + identifier + "/" + type);
+                } else if(isContainer(e.getBlockPlaced())) {
+                    Optional<ParsedTopic> parsed = ParsedTopic.from(is.getItemMeta().getDisplayName());
+                    if (!parsed.isPresent()) {
+                        return;
+                    }
+                    String identifier = parsed.get().getIdentifier();
+                    String type = parsed.get().getType();
+                    if(type.equals("smart")) {
+                        Locator locator = MineduinoPlugin.getInstance().getSmartChestLocator();
+                        locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
+                        e.getPlayer().sendMessage("[MD] Smart chest created! Topic: " + "MD/" + identifier + "/" + type);
+                    }
+
                 }
             }
         }
 
+    }
+
+    public boolean isContainer(Block block) {
+        return block.getState() instanceof Container;
     }
 
     public boolean isPowerable(BlockData data) {

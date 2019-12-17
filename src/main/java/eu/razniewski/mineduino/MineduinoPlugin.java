@@ -1,5 +1,7 @@
 package eu.razniewski.mineduino;
 
+import eu.razniewski.mineduino.annotations.TickInvoker;
+import eu.razniewski.mineduino.annotations.TickRunnableUtil;
 import eu.razniewski.mineduino.config.CachedJsonFileConfigManager;
 import eu.razniewski.mineduino.config.ConfigManager;
 import eu.razniewski.mineduino.connector.MqttHandler;
@@ -11,6 +13,7 @@ import eu.razniewski.mineduino.minecrafttoworld.RedstoneBlockListener;
 import eu.razniewski.mineduino.worldtominecraft.ChestDestroyListener;
 import eu.razniewski.mineduino.worldtominecraft.ChestPlacerListener;
 import eu.razniewski.mineduino.worldtominecraft.WorldToMinecraftListener;
+import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public class MineduinoPlugin extends JavaPlugin {
@@ -19,11 +22,13 @@ public class MineduinoPlugin extends JavaPlugin {
     private static MineduinoPlugin instance;
     private static MqttHandler mqttHandler;
     Locator locator;
+    Locator smartLocator;
     @Override
     public void onEnable() {
         instance = this;
         manager = new CachedJsonFileConfigManager("mineduino.json");
-        this.locator = new JsonConfigLocator();
+        this.locator = new JsonConfigLocator("locator.json");
+        this.smartLocator = new JsonConfigLocator("smartchest.json");
         if(!manager.<Double>getValue("version").isPresent()) {
             manager.setValue("broker", "tcp://mineduino.eu:1883");
             manager.setValue("version", 0.1);
@@ -37,6 +42,11 @@ public class MineduinoPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new RedstoneBlockListener(), this);
         getServer().getPluginManager().registerEvents(new PoweredPlaceListener(), this);
         getServer().getPluginManager().registerEvents(new OutputerBlockBreakListener(), this);
+
+        for(TickInvoker invoker: TickRunnableUtil.getInvocators()) {
+
+            Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, invoker, 20*30, invoker.getTick());
+        }
 
 
     }
@@ -55,6 +65,8 @@ public class MineduinoPlugin extends JavaPlugin {
     public Locator getLocator() {
         return locator;
     }
+
+    public Locator getSmartChestLocator() { return smartLocator; }
 
     public static MineduinoPlugin getInstance() {
         return instance;
