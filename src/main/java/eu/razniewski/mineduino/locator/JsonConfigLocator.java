@@ -17,10 +17,11 @@ import java.util.*;
 
 public class JsonConfigLocator implements Locator{
     private HashBiMap<String, ArrayList<Location>> cache;
-    private String configLoc = "locator.json";
+    private String configLoc;
     private Gson gson;
 
-    public JsonConfigLocator() {
+    public JsonConfigLocator(String configLoc) {
+        this.configLoc = configLoc;
         LocationSerializer serializer = new LocationSerializer();
         this.gson = new GsonBuilder().setPrettyPrinting()
                 .registerTypeAdapter(new TypeToken<HashBiMap<String, ArrayList<Location>>>(){}.getType(), new HashBiMapSerializer())
@@ -88,6 +89,11 @@ public class JsonConfigLocator implements Locator{
     @Override
     public boolean isLocationExists(Location loc) {
         return this.cache.containsValue(loc);
+    }
+
+    @Override
+    public HashBiMap<String, ArrayList<Location>> getLoaded() {
+        return this.cache;
     }
 
     @Override

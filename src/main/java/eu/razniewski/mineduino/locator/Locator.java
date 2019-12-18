@@ -1,7 +1,9 @@
 package eu.razniewski.mineduino.locator;
 
+import com.google.common.collect.HashBiMap;
 import org.bukkit.Location;
 
+import java.util.ArrayList;
 import java.util.Optional;
 
 public interface Locator {
@@ -12,6 +14,7 @@ public interface Locator {
     boolean delete(String key);
     boolean removeAll(Location loc);
     boolean isLocationExists(Location loc);
+    HashBiMap<String, ArrayList<Location>> getLoaded();
     Optional<String> getKeyIfValueExists(Location loc);
 
 }

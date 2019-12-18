@@ -33,9 +33,11 @@ public class ChestPlacerListener implements Listener {
                     }
                     String identifier = parsed.get().getIdentifier();
                     String type = parsed.get().getType();
-                    Locator locator = MineduinoPlugin.getInstance().getLocator();
-                    e.getPlayer().sendMessage("[MD] Simple input chest created! Topic: MD/" + identifier + "/" + type);
-                    locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
+                    if(type.equals("simple")) {
+                        Locator locator = MineduinoPlugin.getInstance().getLocator();
+                        e.getPlayer().sendMessage("[MD] Simple input chest created! Topic: MD/" + identifier + "/" + type);
+                        locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
+                    }
                 } else if(is.getType().equals(Material.IRON_BLOCK)) {
                     Optional<ParsedTopic> parsed = ParsedTopic.from(is.getItemMeta().getDisplayName());
                     if (!parsed.isPresent()) {
