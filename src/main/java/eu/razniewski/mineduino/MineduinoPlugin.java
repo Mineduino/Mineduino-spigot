@@ -31,7 +31,7 @@ public class MineduinoPlugin extends JavaPlugin {
         this.smartLocator = new JsonConfigLocator("smartchest.json");
         if(!manager.<Double>getValue("version").isPresent()) {
             manager.setValue("broker", "tcp://mineduino.eu:1883");
-            manager.setValue("version", 0.1);
+            manager.setValue("version", 1.1);
         }
         this.mqttHandler = new MqttHandler();
         this.mqttHandler.connectTo(manager.<String>getValue("broker").get());
