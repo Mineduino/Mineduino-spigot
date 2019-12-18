@@ -28,7 +28,6 @@ public class TickInvoker implements Runnable {
     }
 
     public Object execute() {
-        System.out.println("Executing... " + this.invoker.getClass().getName());
         try {
             return invocator.invoke(invoker);
         } catch (IllegalAccessException e) {

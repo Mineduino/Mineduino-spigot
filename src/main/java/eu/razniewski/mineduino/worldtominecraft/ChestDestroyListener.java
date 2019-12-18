@@ -18,7 +18,12 @@ public class ChestDestroyListener implements Listener {
             Chest chest = (Chest)e.getBlock().getState();
             if(chest.getCustomName() != null && chest.getCustomName().startsWith("MD")) {
                 Optional<ParsedTopic> topic = ParsedTopic.from(chest.getCustomName());
-                if(topic.isPresent()) {
+                if(topic.isPresent() && topic.get().getType().equals("smart")) {
+                    Locator locator = MineduinoPlugin.getInstance().getSmartChestLocator();
+                    locator.removeAll(e.getBlock().getLocation());
+                    e.getPlayer().sendMessage("[MD] Smart chest deleted!");
+                }
+                else if(topic.isPresent() && topic.get().getType().equals("simple")) {
                     Locator locator = MineduinoPlugin.getInstance().getLocator();
                     locator.removeAll(e.getBlock().getLocation());
                     e.getPlayer().sendMessage("[MD] Simple input chest deleted!");

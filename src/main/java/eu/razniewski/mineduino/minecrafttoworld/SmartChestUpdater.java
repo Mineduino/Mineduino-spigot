@@ -26,7 +26,6 @@ public class SmartChestUpdater {
 
     @MethodTickRunnable
     public void updateContainers() {
-        System.out.println("CONTAINERUPDATE");
         Locator locator = MineduinoPlugin.getInstance().getSmartChestLocator();
 
         Iterator<Map.Entry<String, ArrayList<Location>>> entryIterator = locator.getLoaded().entrySet().iterator();
@@ -50,7 +49,6 @@ class ArrayItemStackSerializator implements JsonSerializer<ItemStack[]> {
         JsonArray arr = new JsonArray();
         for (int i = 0; i < itemStacks.length; i++) {
             if(itemStacks[i] != null) {
-                MineduinoPlugin.getInstance().getLogger().warning(itemStacks[i].toString());
                 ItemStack stack = itemStacks[i];
                 JsonObject obj = new JsonObject();
                 obj.addProperty("material", stack.getType().name());
@@ -79,15 +77,7 @@ class Updater implements Runnable {
             Container container = (Container) b.getState();
             ItemStack[] stacks = container.getInventory().getStorageContents();
             if(stacks != null) {
-                System.out.println("KACZKA");
-                for (int i = 0; i < stacks.length; i++) {
-                    System.out.println(stacks[i]);
-
-                }
-                System.out.println(SmartChestUpdater.gson);
                 String jsoned = SmartChestUpdater.gson.toJson(stacks, ItemStack[].class);
-                MineduinoPlugin.getInstance().getLogger().warning(jsoned);
-
                 MineduinoPlugin.getMqttHandler().standardPublish(topic, jsoned);
             }
         }
