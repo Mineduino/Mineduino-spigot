@@ -24,12 +24,12 @@ public class MqttHandler {
                         e.printStackTrace();
                     }
                     client.setCallback(new MqttToEventCallback());
-                    MineduinoPlugin.getInstance().getLogger().info("FULLY CONNECTED TO MINEDUINO!");
+                    MineduinoPlugin.getInstance().getLogger().info("Successfully connected to MQTT broker!");
                 }
 
                 @Override
                 public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-                    MineduinoPlugin.getInstance().getLogger().info("FAILED TO CONNECT TO MINEDUINO!");
+                    MineduinoPlugin.getInstance().getLogger().info("Unable to reach MQTT broker!");
                 }
             });
             return true;
