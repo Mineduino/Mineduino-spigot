@@ -16,6 +16,8 @@ import eu.razniewski.mineduino.worldtominecraft.WorldToMinecraftListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
 
+import java.io.File;
+
 public class MineduinoPlugin extends JavaPlugin {
 
     ConfigManager manager;
@@ -25,10 +27,13 @@ public class MineduinoPlugin extends JavaPlugin {
     Locator smartLocator;
     @Override
     public void onEnable() {
+        File f = new File("plugins/mineduino");
+        if(!f.exists())
+            f.mkdir();
         instance = this;
-        manager = new CachedJsonFileConfigManager("mineduino.json");
-        this.locator = new JsonConfigLocator("locator.json");
-        this.smartLocator = new JsonConfigLocator("smartchest.json");
+        manager = new CachedJsonFileConfigManager("plugins/mineduino/mineduino.json");
+        this.locator = new JsonConfigLocator("plugins/mineduino/locator.json");
+        this.smartLocator = new JsonConfigLocator("plugins/mineduino/smartchest.json");
         if(!manager.<Double>getValue("version").isPresent()) {
             manager.setValue("broker", "tcp://mineduino.eu:1883");
             manager.setValue("version", 1.1);
