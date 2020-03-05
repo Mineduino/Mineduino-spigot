@@ -2,19 +2,24 @@ package eu.razniewski.mineduino.connector;
 
 import com.google.common.primitives.Ints;
 import eu.razniewski.mineduino.MineduinoPlugin;
+import eu.razniewski.mineduino.config.CachedJsonFileConfigManager;
 import org.eclipse.paho.client.mqttv3.*;
 import org.eclipse.paho.client.mqttv3.persist.MemoryPersistence;
-
+import eu.razniewski.mineduino.config.CachedJsonFileConfigManager;
+import eu.razniewski.mineduino.config.ConfigManager;
 import java.nio.charset.Charset;
 
 public class MqttHandler {
+    ConfigManager manager;
     private MqttAsyncClient client;
-
     public boolean connectTo(String uri) {
         try {
+            manager = new CachedJsonFileConfigManager("plugins/mineduino/config.json");
             client = new MqttAsyncClient(uri, MqttAsyncClient.generateClientId(), new MemoryPersistence());
             MqttConnectOptions opts = new MqttConnectOptions();
             opts.setAutomaticReconnect(true);
+            opts.setUserName(manager.<String>getValue("broker_login_username").get());
+            opts.setPassword(manager.<String>getValue("broker_login_password").get().toCharArray());
             client.connect(opts, null, new IMqttActionListener() {
                 @Override
                 public void onSuccess(IMqttToken iMqttToken) {
@@ -24,12 +29,20 @@ public class MqttHandler {
                         e.printStackTrace();
                     }
                     client.setCallback(new MqttToEventCallback());
-                    MineduinoPlugin.getInstance().getLogger().info("FULLY CONNECTED TO MINEDUINO!");
+                    manager = new CachedJsonFileConfigManager("plugins/mineduino/config.json");
+                    MineduinoPlugin.getInstance().getLogger().info("___________________________________________");
+                    MineduinoPlugin.getInstance().getLogger().info("Successfully connected to MQTT broker!");
+                    MineduinoPlugin.getInstance().getLogger().info("Broker: " + manager.<String>getValue("broker").get());
+                    MineduinoPlugin.getInstance().getLogger().info("___________________________________________");
                 }
 
                 @Override
                 public void onFailure(IMqttToken iMqttToken, Throwable throwable) {
-                    MineduinoPlugin.getInstance().getLogger().info("FAILED TO CONNECT TO MINEDUINO!");
+                    manager = new CachedJsonFileConfigManager("plugins/mineduino/config.json");
+                    MineduinoPlugin.getInstance().getLogger().info("___________________________________________");
+                    MineduinoPlugin.getInstance().getLogger().info("Unable to reach MQTT broker!");
+                    MineduinoPlugin.getInstance().getLogger().info("Broker: " + manager.<String>getValue("broker").get());
+                    MineduinoPlugin.getInstance().getLogger().info("___________________________________________");
                 }
             });
             return true;

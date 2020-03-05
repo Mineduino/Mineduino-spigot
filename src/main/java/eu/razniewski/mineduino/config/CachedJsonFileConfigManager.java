@@ -94,7 +94,6 @@ public class CachedJsonFileConfigManager implements ConfigManager{
     private void loadFromCache() {
         try {
             String contents = new String(Files.readAllBytes(Paths.get(configLoc)));
-            System.out.println(contents);
             this.cache = gson.fromJson(contents, new TypeToken<HashMap<String, Object>>(){}.getType());
         } catch (IOException e) {
             this.cache = new HashMap<>();
