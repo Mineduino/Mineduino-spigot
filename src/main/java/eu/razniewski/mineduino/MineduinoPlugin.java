@@ -31,11 +31,13 @@ public class MineduinoPlugin extends JavaPlugin {
         if(!f.exists())
             f.mkdir();
         instance = this;
-        manager = new CachedJsonFileConfigManager("plugins/mineduino/mineduino.json");
+        manager = new CachedJsonFileConfigManager("plugins/mineduino/config.json");
         this.locator = new JsonConfigLocator("plugins/mineduino/locator.json");
         this.smartLocator = new JsonConfigLocator("plugins/mineduino/smartchest.json");
         if(!manager.<Double>getValue("version").isPresent()) {
             manager.setValue("broker", "tcp://mineduino.eu:1883");
+            manager.setValue("broker_login_username", "username");
+            manager.setValue("broker_login_password", "password");
             manager.setValue("version", 1.1);
         }
         this.mqttHandler = new MqttHandler();
