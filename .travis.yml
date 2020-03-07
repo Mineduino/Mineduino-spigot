@@ -4,8 +4,8 @@ services:
 before_install:
 - docker build -t docker.pkg.github.com/mineduino/mineduino-spigot/spigot:$TRAVIS_BRANCH .
 script:
-- echo "$DOCKER_PASSWORD" | docker login docker.pkg.github.com -u "$DOCKER_USERNAME" --password-stdin
-- docker push docker.pkg.github.com/mineduino/mineduino-spigot/spigot:$TRAVIS_BRANCH
+- 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then echo "$DOCKER_PASSWORD" | docker login docker.pkg.github.com -u "$DOCKER_USERNAME" --password-stdin; fi'
+- 'if [ "$TRAVIS_PULL_REQUEST" = "false" ]; then docker push docker.pkg.github.com/mineduino/mineduino-spigot/spigot:$TRAVIS_BRANCH; fi'
 env:
   global:
   - secure: VzARwpQd5rb/NbSG9m+KiQtumVxhbADYhoR2xTmaffoOyMX8juyfecqHe0Jleg6BcK+6kDVcm562Fl4xaVoRPyBTZEIpiFg3hVw+WXG1a7bDsAJLWctm/MvqTJWr8aTg14PyeIH45aUhmMW1KUOct+bTZH6f+ddTEfUST3SbfZnyQhaojGpB25VVNVzXUDVZiHAcFLzerO58que2HL7MbnUHliwbucMlV8q8qxCHpyUttQx3EONWNqkfEiR3N3bMD9qQifVmeHSebrexd7E6sWfYq4GTWoDA4zhVPgWZ+Cc/L7Be46fBgbjQB9Lb+nWLYb5zZn9DQE3X14Iczb754gddDCfLV4vs8D6l73vFMT/sVN0/2DERrdW5CU7yzTVyd145oQzJLuZY75nhcLnE2RjNHOD9NraVZCxoRuFg3cjbLNWVlGIXb7QFugX/VzjsBHIQrkGBc+h4S6rZLO3nCASms/BmA1mN5VRukSaBBaB+nwbMw4u5h3yIQhdqu8WtswA85mqfphJwZxsQ0MtZOxaRi6t0vgXVCJikQ9Z15p6hEiErH8+rPG+0UjBNQHymvOfm9bVXR3iEOlKjddwVLRgyDxaekjwQv1GKSxDyrNHYQisGY8a8q5fqtDXfZrugi/Og03ujxQH7RkyhEm96e3PPmuP/5yNQaTEc3vzNyZE=
