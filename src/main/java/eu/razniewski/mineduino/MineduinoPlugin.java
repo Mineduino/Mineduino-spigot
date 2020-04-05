@@ -11,7 +11,7 @@ import eu.razniewski.mineduino.minecrafttoworld.OutputerBlockBreakListener;
 import eu.razniewski.mineduino.minecrafttoworld.PoweredPlaceListener;
 import eu.razniewski.mineduino.minecrafttoworld.RedstoneBlockListener;
 import eu.razniewski.mineduino.worldtominecraft.ChestDestroyListener;
-import eu.razniewski.mineduino.worldtominecraft.ChestPlacerListener;
+import eu.razniewski.mineduino.worldtominecraft.BlockPlacerListener;
 import eu.razniewski.mineduino.worldtominecraft.WorldToMinecraftListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -44,7 +44,7 @@ public class MineduinoPlugin extends JavaPlugin {
         this.mqttHandler.connectTo(manager.<String>getValue("broker").get());
 
         getServer().getPluginManager().registerEvents(new WorldToMinecraftListener(), this);
-        getServer().getPluginManager().registerEvents(new ChestPlacerListener(), this);
+        getServer().getPluginManager().registerEvents(new BlockPlacerListener(), this);
         getServer().getPluginManager().registerEvents(new ChestDestroyListener(), this);
         getServer().getPluginManager().registerEvents(new RedstoneBlockListener(), this);
         getServer().getPluginManager().registerEvents(new PoweredPlaceListener(), this);

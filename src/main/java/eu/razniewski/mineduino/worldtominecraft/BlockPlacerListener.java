@@ -12,9 +12,12 @@ import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;
 
-public class ChestPlacerListener implements Listener {
+public class BlockPlacerListener implements Listener {
+
+    private Material[] signs = new Material[]{Material.SPRUCE_SIGN, Material.ACACIA_SIGN, Material.BIRCH_SIGN, Material.DARK_OAK_SIGN, Material.JUNGLE_SIGN, Material.OAK_SIGN};
+
     @EventHandler
-    public void onChestPlace(BlockPlaceEvent e) {
+    public void onBlockPlace(BlockPlaceEvent e) {
         if (e.isCancelled()) {
             return;
         }
@@ -61,9 +64,30 @@ public class ChestPlacerListener implements Listener {
                         e.getPlayer().sendMessage("[MD] Hidden block created! Topic: MD/" + identifier + "/" + type);
                         locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
                     }
+                } else if(isSign(is.getType())) {
+                    Optional<ParsedTopic> parsed = ParsedTopic.from(is.getItemMeta().getDisplayName());
+                    if (!parsed.isPresent()) {
+                        return;
+                    }
+                    String identifier = parsed.get().getIdentifier();
+                    String type = parsed.get().getType();
+                    if(type.equals("sign")) {
+                        Locator locator = MineduinoPlugin.getInstance().getLocator();
+                        e.getPlayer().sendMessage("[MD] Input sign created! Topic: MD/" + identifier + "/" + type);
+                        locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
+                    }
                 }
 
             }
         }
+    }
+
+    private boolean isSign(Material type) {
+        for (int i = 0; i < signs.length; i++) {
+            if(signs[i].equals(type)) {
+                return true;
+            }
+        }
+        return false;
     }
 }
