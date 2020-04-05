@@ -6,7 +6,7 @@
 
     <groupId>eu.razniewski</groupId>
     <artifactId>mineduino</artifactId>
-    <version>1.2</version>
+    <version>1.2.1</version>
     <repositories>
         <repository>
             <id>spigotmc-repo</id>

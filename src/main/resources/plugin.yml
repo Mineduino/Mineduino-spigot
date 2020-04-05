@@ -1,4 +1,4 @@
 name: MineduinoPlugin
-version: 1.2
+version: 1.2.1
 main: eu.razniewski.mineduino.MineduinoPlugin
 api-version: 1.13
