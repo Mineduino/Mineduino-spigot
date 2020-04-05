@@ -1,29 +1,18 @@
----
-description: Install the spigot plugin
----
-
 # Install the plugin
 
-## Getting Super Powers
+## Install the plugin
 
-Becoming a super hero is a fairly straight forward process:
+First of all you need to download the latest version of the plugin from here \(mineduino-x.x.x.jar\):
 
-```
-$ give me super-powers
-```
+{% embed url="https://github.com/Mineduino/Mineduino-spigot/releases" %}
 
-{% hint style="info" %}
- Super-powers are granted randomly so please submit an issue if you're not happy with yours.
-{% endhint %}
+Put this file into the /plugins folder
 
-Once you're strong enough, save the world:
+![](../.gitbook/assets/zrzut-ekranu-z-2020-04-05-15-41-35.png)
 
-{% code title="hello.sh" %}
-```bash
-# Ain't no code for that yet, sorry
-echo 'You got to trust me on this, I saved the world'
-```
-{% endcode %}
+Now, restart the server, and you should encounter something like this in the logs:
+
+![](../.gitbook/assets/zrzut-ekranu-z-2020-04-05-15-44-20.png)
 
 
 
