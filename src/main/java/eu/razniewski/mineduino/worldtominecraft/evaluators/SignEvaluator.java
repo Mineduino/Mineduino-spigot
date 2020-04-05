@@ -28,12 +28,6 @@ public class SignEvaluator implements Consumer<MineduinoMessageEvent> {
             String parsed = new String(bytes, StandardCharsets.UTF_8);
             String[] arrayParsed = gsonEvaluator.fromJson(parsed, String[].class);
             if(arrayParsed != null) {
-
-                for (int i = 0; i < arrayParsed.length; i++) {
-                    if(arrayParsed[i].length() > 15) {
-                        arrayParsed[i] = arrayParsed[i].substring(0, 15);
-                    }
-                }
                 return arrayParsed;
             } else {
                 return defaultStringArray;
