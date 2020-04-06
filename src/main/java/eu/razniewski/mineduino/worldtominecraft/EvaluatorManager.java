@@ -2,10 +2,7 @@ package eu.razniewski.mineduino.worldtominecraft;
 
 import eu.razniewski.mineduino.MineduinoPlugin;
 import eu.razniewski.mineduino.connector.MineduinoMessageEvent;
-import eu.razniewski.mineduino.worldtominecraft.evaluators.HiddenEvaluator;
-import eu.razniewski.mineduino.worldtominecraft.evaluators.RawEvaluator;
-import eu.razniewski.mineduino.worldtominecraft.evaluators.SignEvaluator;
-import eu.razniewski.mineduino.worldtominecraft.evaluators.SimpleEvaluator;
+import eu.razniewski.mineduino.worldtominecraft.evaluators.*;
 
 import java.util.HashMap;
 import java.util.Map;
@@ -19,6 +16,7 @@ public class EvaluatorManager {
         evaluators.put("raw", new RawEvaluator());
         evaluators.put("hidden", new HiddenEvaluator());
         evaluators.put("sign", new SignEvaluator());
+        evaluators.put("entity", new EntityEvaluator());
     }
 
 

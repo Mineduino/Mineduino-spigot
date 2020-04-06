@@ -12,6 +12,7 @@ import eu.razniewski.mineduino.minecrafttoworld.PoweredPlaceListener;
 import eu.razniewski.mineduino.minecrafttoworld.RedstoneBlockListener;
 import eu.razniewski.mineduino.worldtominecraft.ChestDestroyListener;
 import eu.razniewski.mineduino.worldtominecraft.BlockPlacerListener;
+import eu.razniewski.mineduino.worldtominecraft.EntityControllerListener;
 import eu.razniewski.mineduino.worldtominecraft.WorldToMinecraftListener;
 import org.bukkit.Bukkit;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -49,6 +50,7 @@ public class MineduinoPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new RedstoneBlockListener(), this);
         getServer().getPluginManager().registerEvents(new PoweredPlaceListener(), this);
         getServer().getPluginManager().registerEvents(new OutputerBlockBreakListener(), this);
+        getServer().getPluginManager().registerEvents(new EntityControllerListener(), this);
 
         for(TickInvoker invoker: TickRunnableUtil.getInvocators()) {
 
