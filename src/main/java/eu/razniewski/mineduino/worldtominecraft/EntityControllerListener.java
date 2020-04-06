@@ -1,20 +1,20 @@
 package eu.razniewski.mineduino.worldtominecraft;
 
+import com.github.ysl3000.bukkit.pathfinding.PathfinderGoalAPI;
+import com.github.ysl3000.bukkit.pathfinding.entity.Insentient;
+import com.github.ysl3000.bukkit.pathfinding.pathfinding.PathfinderManager;
 import eu.razniewski.mineduino.entitybraincontroller.BrainController;
-import eu.razniewski.mineduino.entitybraincontroller.PathfinderGoalWalkToTile;
 import net.minecraft.server.v1_14_R1.*;
-import org.bukkit.entity.LivingEntity;
+import org.bukkit.entity.Creature;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
 
 import java.lang.reflect.Field;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 public class EntityControllerListener implements Listener {
+    private PathfinderManager manager = PathfinderGoalAPI.getAPI();
     @EventHandler
     public void onEntityClick(PlayerInteractEntityEvent event) {
 //        Field entityF = null;
@@ -46,6 +46,22 @@ public class EntityControllerListener implements Listener {
 //
 //        }
 //        PathfinderManager manager = PathfinderGoalAPI.getAPI();
+        if(event.getRightClicked() instanceof Creature) {
+            Insentient pathFinderGoalEntity = manager.getPathfinderGoalEntity((Creature) event.getRightClicked());
+            pathFinderGoalEntity.clearPathfinderGoals();
+            pathFinderGoalEntity.clearTargetPathfinderGoals();
+            String topic = "MD/kaczka/entity";
+            if(Tester.brainControllerMap.containsKey(topic)) {
+                Tester.brainControllerMap.get(topic).add(new BrainController(pathFinderGoalEntity));
+            } else {
+                HashSet<BrainController> newController = new HashSet<>();
+                newController.add(new BrainController(pathFinderGoalEntity));
+                Tester.brainControllerMap.put(topic, newController);
+
+            }
+
+        }
+
     }
     private <T> List<Field> getFields(T t) {
         List<Field> fields = new ArrayList<>();

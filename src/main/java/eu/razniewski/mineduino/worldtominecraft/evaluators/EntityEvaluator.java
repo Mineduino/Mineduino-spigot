@@ -6,16 +6,12 @@ import eu.razniewski.mineduino.MineduinoPlugin;
 import eu.razniewski.mineduino.connector.MineduinoMessageEvent;
 import eu.razniewski.mineduino.entitybraincontroller.BrainController;
 import eu.razniewski.mineduino.entitybraincontroller.EntityRequest;
-import eu.razniewski.mineduino.entitybraincontroller.PathfinderGoalWalkToTile;
 import eu.razniewski.mineduino.utils.ParsedTopic;
 import eu.razniewski.mineduino.worldtominecraft.Tester;
-import org.bukkit.Bukkit;
-import org.bukkit.ChatColor;
-import org.bukkit.Location;
-import org.bukkit.block.Block;
-import org.bukkit.block.Sign;
 
 import java.nio.charset.StandardCharsets;
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.Optional;
 import java.util.function.Consumer;
 
@@ -41,12 +37,15 @@ public class EntityEvaluator implements Consumer<MineduinoMessageEvent> {
             return;
         }
 
-        BrainController controller = Tester.brainControllerMap.getOrDefault(mineduinoMessageEvent.getTopic(), null);
+        HashSet<BrainController> controller = Tester.brainControllerMap.getOrDefault(mineduinoMessageEvent.getTopic(), null);
 
         if(controller != null) {
             EntityRequest req = fromByteArray(mineduinoMessageEvent.getMessage());
             if(req != null) {
-                controller.getSelector().a(0, new PathfinderGoalWalkToTile(controller.getEntity(), 1, req.getDeltaX(), req.getDeltaY(), req.getDeltaZ()));
+                controller.forEach((brainController -> {
+                    brainController.moveTo(req.getDeltaX(), req.getDeltaY(), req.getDeltaZ(), 1);
+
+                }));
                 System.out.println("OK");
             }else {
                 MineduinoPlugin.getInstance().getLogger().warning("[PROBLEM] CANT PARSE");

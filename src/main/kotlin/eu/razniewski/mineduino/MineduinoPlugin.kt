@@ -45,14 +45,14 @@ class MineduinoPlugin : JavaPlugin() {
                 }
                 else -> {
                     brainControllerEnabled = false
-                    instance!!.logger.info("Disabled brain controller - spigot version not supported")
+                    this.logger.info("Disabled brain controller - spigot version not supported")
                 }
             }
-            instance!!.logger.info("Brain controller enabled - provided by this plugin")
+            this.logger.info("Brain controller enabled - provided by this plugin")
             setApi(pathfinderManager!!)
         } else {
             brainControllerEnabled = true
-            instance!!.logger.info("Brain controller enabled - provided by other plugin")
+            this.logger.info("Brain controller enabled - provided by other plugin")
         }
     }
 
