@@ -8,6 +8,8 @@ import eu.razniewski.mineduino.annotations.TickRunnableUtil
 import eu.razniewski.mineduino.config.CachedJsonFileConfigManager
 import eu.razniewski.mineduino.config.ConfigManager
 import eu.razniewski.mineduino.connector.MqttHandler
+import eu.razniewski.mineduino.entitybraincontroller.BrainManager
+import eu.razniewski.mineduino.entitybraincontroller.MemoryBrainManager
 import eu.razniewski.mineduino.locator.JsonConfigLocator
 import eu.razniewski.mineduino.locator.Locator
 import eu.razniewski.mineduino.minecrafttoworld.OutputerBlockBreakListener
@@ -26,6 +28,7 @@ class MineduinoPlugin : JavaPlugin() {
     var locator: Locator? = null
     var smartChestLocator: Locator? = null
     var pathfinderManager: PathfinderManager? = null
+    var brainManager: BrainManager? = null
     private fun enablePathFinder() {
         if (getAPI() == null) {
             val splitted = Bukkit.getServer().javaClass.getPackage().name.replace(".", ",").split(",".toRegex()).toTypedArray()
@@ -78,6 +81,7 @@ class MineduinoPlugin : JavaPlugin() {
         server.pluginManager.registerEvents(PoweredPlaceListener(), this)
         server.pluginManager.registerEvents(OutputerBlockBreakListener(), this)
         if (brainControllerEnabled) {
+            brainManager = MemoryBrainManager()
             server.pluginManager.registerEvents(EntityControllerListener(), this)
         }
         for (invoker in TickRunnableUtil.getInvocators()) {

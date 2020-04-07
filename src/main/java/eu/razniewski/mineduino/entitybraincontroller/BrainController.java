@@ -25,7 +25,7 @@ public class BrainController {
 
     public void moveTo(double deltaX, double deltaY, double deltaZ, double speed) {
         Location gotoloc = this.entity.getBukkitEntity().getLocation().add(deltaX, deltaY, deltaZ);
-        this.entity.addPathfinderGoal(0, new PathfinderGoalMoveToLocation(this.entity, gotoloc, speed, 0));
+        this.entity.addPathfinderGoal(0, new PathfinderGoalMoveToLocation(this.entity, gotoloc, speed, 0.3));
 
     }
 
