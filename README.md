@@ -30,7 +30,7 @@ Check out this channel:
 
 ### Contact
 
-* Discord: [https://discord.gg/5GRMyh](https://discord.gg/5GRMyh)
+* Discord: [https://discord.gg/4Pkn99R](https://discord.gg/4Pkn99R)
 * E-mail: adam@razniewski.eu
 
 

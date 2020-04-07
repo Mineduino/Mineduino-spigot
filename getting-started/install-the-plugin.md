@@ -14,5 +14,19 @@ Now, restart the server, and you should encounter something like this in the log
 
 ![](../.gitbook/assets/zrzut-ekranu-z-2020-04-05-15-44-20.png)
 
+That indicates, that mineduino is connected, and fully works!
 
+Now you can edit config in plugins/mineduino/config.json
+
+```text
+{
+  "broker_login_password": "password",
+  "broker_login_username": "username",
+  "broker": "tcp://mineduino.eu:1883",
+  "version": 1.1
+}
+
+```
+
+Do not change version, other things are self-explainatory
 
