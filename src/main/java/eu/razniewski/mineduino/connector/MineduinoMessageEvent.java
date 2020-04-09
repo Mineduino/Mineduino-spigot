@@ -2,7 +2,6 @@ package eu.razniewski.mineduino.connector;
 
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 
 public class MineduinoMessageEvent extends Event {
     private final static HandlerList handlers = new HandlerList();
