@@ -51,7 +51,6 @@ public class MineduinoPlugin extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new OutputerBlockBreakListener(), this);
 
         for(TickInvoker invoker: TickRunnableUtil.getInvocators()) {
-
             Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, invoker, 20*30, invoker.getTick());
         }
 
