@@ -34,12 +34,6 @@ public class ConnectedListener implements MqttClientConnectedListener {
                         return null;
                 });
         }).exceptionally(throwable -> {
-            System.out.println(throwable.getMessage());
-            System.out.println(throwable.getMessage());
-            System.out.println(throwable.getMessage());
-            System.out.println(throwable.getMessage());
-            System.out.println(throwable.getMessage());
-            System.out.println(throwable.getMessage());
             return null;
         });
 
