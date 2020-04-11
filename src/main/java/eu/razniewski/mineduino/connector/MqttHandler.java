@@ -45,7 +45,7 @@ public class MqttHandler {
         if (this.client == null) {
             throw new IllegalStateException("First of all connect to broker");
         }
-        client.publishWith().topic(topic).retain(true).payload(message.getBytes(Charset.forName("UTF-8"))).send();
+        client.publishWith().topic(topic).retain(false).payload(message.getBytes(Charset.forName("UTF-8"))).send();
         return true;
     }
 
@@ -53,7 +53,7 @@ public class MqttHandler {
         if (this.client == null) {
             throw new IllegalStateException("First of all connect to broker");
         }
-        client.publishWith().topic(topic).retain(true).payload(new byte[]{value}).send();
+        client.publishWith().topic(topic).retain(false).payload(new byte[]{value}).send();
         return true;
     }
 

@@ -104,6 +104,10 @@ public class EntityMoveToDelta extends EntityRequest {
             return;
         } else if(deltaZ == 1 && deltaY == 0 && deltaX == 0) {
             deltaZ = deltaZ + 1;
+        } else if(deltaX == -1 && deltaY == 0 && deltaZ == 0) {
+            deltaX = deltaX - 1;
+        } else if(deltaZ == -1 && deltaY == 0 && deltaX == 0) {
+            deltaZ = deltaZ - 1;
         }
 
         Location gotoloc = controller.getEntity().getBukkitEntity().getLocation().add(deltaX, deltaY, deltaZ);

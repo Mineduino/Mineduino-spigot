@@ -13,7 +13,6 @@ import eu.razniewski.mineduino.entitybraincontroller.actions.EntityRequest;
 import eu.razniewski.mineduino.utils.ParsedTopic;
 import eu.razniewski.mineduino.utils.RuntimeTypeAdapterFactory;
 
-import javax.swing.text.html.parser.Entity;
 import java.nio.charset.StandardCharsets;
 import java.util.Optional;
 import java.util.Set;
@@ -54,6 +53,7 @@ public class EntityEvaluator implements Consumer<MineduinoMessageEvent> {
         if(controller != null) {
             EntityRequest req = fromByteArray(mineduinoMessageEvent.getMessage());
             EntityContext context = new EntityContext(mineduinoMessageEvent.getTopic());
+            final int[] its = {0};
             if(req != null) {
                 controller.forEach((brain -> {
                     req.processBrain(brain, context);
