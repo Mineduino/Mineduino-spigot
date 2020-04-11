@@ -1,5 +1,5 @@
 name: MineduinoPlugin
-version: 1.2.2
+version: 1.2.3
 main: eu.razniewski.mineduino.MineduinoPlugin
 api-version: 1.13
 softdepend: [PathfinderAPI]
