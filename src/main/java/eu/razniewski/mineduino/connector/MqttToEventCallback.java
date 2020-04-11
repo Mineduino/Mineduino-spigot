@@ -1,25 +1,17 @@
 package eu.razniewski.mineduino.connector;
-import eu.razniewski.mineduino.MineduinoPlugin;
-import org.eclipse.paho.client.mqttv3.IMqttDeliveryToken;
-import org.eclipse.paho.client.mqttv3.MqttCallback;
-import org.eclipse.paho.client.mqttv3.MqttMessage;
 
-public class MqttToEventCallback  implements MqttCallback  {
+import com.hivemq.client.mqtt.mqtt3.message.publish.Mqtt3Publish;
+import eu.razniewski.mineduino.MineduinoPlugin;
+
+import java.util.function.Consumer;
+
+public class MqttToEventCallback implements Consumer<Mqtt3Publish> {
     MineduinoPlugin plugin = MineduinoPlugin.getInstance();
     @Override
-    public void connectionLost(Throwable throwable) {
-
-    }
-
-    @Override
-    public void messageArrived(String topic, MqttMessage mqttMessage) {
+    public void accept(Mqtt3Publish mqtt3Publish) {
         plugin.getServer().getScheduler().runTask(plugin, () -> {
-            plugin.getServer().getPluginManager().callEvent(new MineduinoMessageEvent(topic, mqttMessage.getPayload()));
+            plugin.getServer().getPluginManager().callEvent(new MineduinoMessageEvent(mqtt3Publish.getTopic().toString(), mqtt3Publish.getPayloadAsBytes()));
         });
-    }
-
-    @Override
-    public void deliveryComplete(IMqttDeliveryToken iMqttDeliveryToken) {
 
     }
 }

@@ -5,17 +5,30 @@ import com.google.gson.GsonBuilder;
 import eu.razniewski.mineduino.MineduinoPlugin;
 import eu.razniewski.mineduino.connector.MineduinoMessageEvent;
 import eu.razniewski.mineduino.entitybraincontroller.BrainController;
-import eu.razniewski.mineduino.entitybraincontroller.EntityRequest;
+import eu.razniewski.mineduino.entitybraincontroller.EntityContext;
+import eu.razniewski.mineduino.entitybraincontroller.actions.EntityGetInformation;
+import eu.razniewski.mineduino.entitybraincontroller.actions.EntityMoveToDelta;
+import eu.razniewski.mineduino.entitybraincontroller.actions.EntityMoveToPos;
+import eu.razniewski.mineduino.entitybraincontroller.actions.EntityRequest;
 import eu.razniewski.mineduino.utils.ParsedTopic;
+import eu.razniewski.mineduino.utils.RuntimeTypeAdapterFactory;
 
+import javax.swing.text.html.parser.Entity;
 import java.nio.charset.StandardCharsets;
-import java.util.HashSet;
 import java.util.Optional;
 import java.util.Set;
 import java.util.function.Consumer;
 
 public class EntityEvaluator implements Consumer<MineduinoMessageEvent> {
-    private Gson gsonEvaluator = new GsonBuilder().create();
+    private static RuntimeTypeAdapterFactory<EntityRequest> entityAdapter = RuntimeTypeAdapterFactory.of(EntityRequest.class, "type")
+            .registerSubtype(EntityMoveToDelta.class, EntityMoveToDelta.JSONTYPE)
+            .registerSubtype(EntityMoveToPos.class, EntityMoveToPos.JSONTYPE)
+            .registerSubtype(EntityGetInformation.class, EntityGetInformation.JSONTYPE);
+    private static Gson gsonEvaluator = new GsonBuilder().registerTypeAdapterFactory(entityAdapter).create();
+
+    public static Gson getGsonEvaluator() {
+        return gsonEvaluator;
+    }
 
     EntityRequest fromByteArray(byte[] bytes) {
         try {
@@ -32,22 +45,18 @@ public class EntityEvaluator implements Consumer<MineduinoMessageEvent> {
     public void accept(MineduinoMessageEvent mineduinoMessageEvent) {
 
         Optional<ParsedTopic> parsed = ParsedTopic.from(mineduinoMessageEvent.getTopic());
-        System.out.println(mineduinoMessageEvent.getTopic());
         if(!parsed.isPresent()) {
-            System.out.println("ups");
             return;
         }
 
         Set<BrainController> controller = MineduinoPlugin.getInstance().getBrainManager().getBrainsFor(parsed.get().getTopic());
-        System.out.println("ctrl: " + controller);
 
         if(controller != null) {
             EntityRequest req = fromByteArray(mineduinoMessageEvent.getMessage());
-            System.out.println(req);
+            EntityContext context = new EntityContext(mineduinoMessageEvent.getTopic());
             if(req != null) {
-                System.out.println("n");
-                controller.forEach((brainController -> {
-                    brainController.moveTo(req.getDeltaX(), req.getDeltaY(), req.getDeltaZ(), 1);
+                controller.forEach((brain -> {
+                    req.processBrain(brain, context);
                 }));
             }else {
                 MineduinoPlugin.getInstance().getLogger().warning("[PROBLEM] CANT PARSE");

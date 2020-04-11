@@ -6,6 +6,8 @@ import net.minecraft.server.v1_14_R1.EntityInsentient;
 import net.minecraft.server.v1_14_R1.PathfinderGoalSelector;
 import org.bukkit.Location;
 
+import java.util.Objects;
+
 public class BrainController {
     private Insentient entity;
 
@@ -22,11 +24,16 @@ public class BrainController {
         return entity;
     }
 
-
-    public void moveTo(double deltaX, double deltaY, double deltaZ, double speed) {
-        Location gotoloc = this.entity.getBukkitEntity().getLocation().add(deltaX, deltaY, deltaZ);
-        this.entity.addPathfinderGoal(0, new PathfinderGoalMoveToLocation(this.entity, gotoloc, speed, 0.3));
-
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        BrainController that = (BrainController) o;
+        return Objects.equals(entity.getBukkitEntity().getEntityId(), that.entity.getBukkitEntity().getEntityId());
     }
 
+    @Override
+    public int hashCode() {
+        return Objects.hash(entity.getBukkitEntity().getEntityId());
+    }
 }

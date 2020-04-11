@@ -22,6 +22,7 @@ import eu.razniewski.mineduino.worldtominecraft.WorldToMinecraftListener
 import org.bukkit.Bukkit
 import org.bukkit.plugin.java.JavaPlugin
 import java.io.File
+import java.util.function.Consumer
 
 class MineduinoPlugin : JavaPlugin() {
     var manager: ConfigManager = CachedJsonFileConfigManager("plugins/mineduino/config.json");
@@ -82,7 +83,9 @@ class MineduinoPlugin : JavaPlugin() {
         server.pluginManager.registerEvents(OutputerBlockBreakListener(), this)
         if (brainControllerEnabled) {
             brainManager = MemoryBrainManager()
+            var entityController = EntityControllerListener();
             server.pluginManager.registerEvents(EntityControllerListener(), this)
+            entityController.loadAllFromWorlds();
         }
         for (invoker in TickRunnableUtil.getInvocators()) {
             Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, invoker, 20 * 30.toLong(), invoker.tick.toLong())

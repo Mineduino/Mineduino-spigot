@@ -8,9 +8,16 @@ import eu.razniewski.mineduino.entitybraincontroller.BrainController;
 import eu.razniewski.mineduino.utils.ParsedTopic;
 import org.bukkit.Material;
 import org.bukkit.entity.Creature;
+import org.bukkit.entity.Entity;
 import org.bukkit.event.EventHandler;
+import org.bukkit.event.EventPriority;
 import org.bukkit.event.Listener;
+import org.bukkit.event.entity.CreatureSpawnEvent;
+import org.bukkit.event.entity.EntityEvent;
+import org.bukkit.event.entity.EntitySpawnEvent;
 import org.bukkit.event.player.PlayerInteractEntityEvent;
+import org.bukkit.event.world.ChunkLoadEvent;
+import org.bukkit.event.world.WorldLoadEvent;
 import org.bukkit.inventory.ItemStack;
 
 import java.util.Optional;
@@ -39,4 +46,38 @@ public class EntityControllerListener implements Listener {
         }
 
     }
+
+    @EventHandler
+    public void onEntitySpawn(CreatureSpawnEvent event) {
+        if(event.getEntity().getCustomName() != null && event.getEntity().getCustomName().startsWith("MD/")) {
+            Optional<ParsedTopic> parsed = ParsedTopic.from(event.getEntity().getCustomName());
+            if (!parsed.isPresent()) {
+                return;
+            }
+            Insentient pathFinderGoalEntity = manager.getPathfinderGoalEntity((Creature) event.getEntity());
+            pathFinderGoalEntity.clearPathfinderGoals();
+            pathFinderGoalEntity.clearTargetPathfinderGoals();
+            MineduinoPlugin.getInstance().getBrainManager().addBrain(parsed.get().getTopic(), new BrainController(pathFinderGoalEntity));
+        }
+    }
+
+    public void loadAllFromWorlds() {
+        MineduinoPlugin.getInstance().getServer().getWorlds().forEach(consumer -> {
+            consumer.getLivingEntities().forEach(entity -> {
+                if(entity.getCustomName() != null && entity.getCustomName().startsWith("MD/")) {
+                    Optional<ParsedTopic> parsed = ParsedTopic.from(entity.getCustomName());
+                    if (!parsed.isPresent()) {
+                        return;
+                    }
+                    Insentient pathFinderGoalEntity = manager.getPathfinderGoalEntity((Creature) entity);
+                    pathFinderGoalEntity.clearPathfinderGoals();
+                    pathFinderGoalEntity.clearTargetPathfinderGoals();
+                    MineduinoPlugin.getInstance().getBrainManager().addBrain(parsed.get().getTopic(), new BrainController(pathFinderGoalEntity));
+                }
+            });
+        });
+    }
+
+
+
 }
