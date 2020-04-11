@@ -85,7 +85,7 @@ class MineduinoPlugin : JavaPlugin() {
             brainManager = MemoryBrainManager()
             var entityController = EntityControllerListener();
             server.pluginManager.registerEvents(EntityControllerListener(), this)
-//            entityController.loadAllFromWorlds();
+            entityController.loadAllFromWorlds();
         }
         for (invoker in TickRunnableUtil.getInvocators()) {
             Bukkit.getScheduler().scheduleAsyncRepeatingTask(this, invoker, 20 * 30.toLong(), invoker.tick.toLong())
