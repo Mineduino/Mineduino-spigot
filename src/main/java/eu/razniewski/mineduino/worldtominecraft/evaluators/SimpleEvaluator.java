@@ -62,13 +62,8 @@ class SetProperItemsRunnable implements Runnable {
     }
 
     public ItemStack[] getProperItemStack(int value, int maxValue) {
-        ItemStack[] stack = null;
-        if(value >= maxValue) {
-            stack = new ItemStack[maxValue];
-        } else {
-            stack = new ItemStack[value];
-        }
-        for (int i = 0; i < stack.length; i++) {
+        ItemStack[] stack = new ItemStack[maxValue];
+        for (int i = 0; i < value && i < stack.length; i++) {
             stack[i] = new ItemStack(Material.WOODEN_HOE, 1);
             stack[i].getItemMeta().setDisplayName("MINEDUINO");
         }
