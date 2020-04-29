@@ -53,6 +53,10 @@ public class PoweredPlaceListener implements Listener {
                         Locator locator = MineduinoPlugin.getInstance().getSmartChestLocator();
                         locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
                         e.getPlayer().sendMessage("[MD] Smart chest created! Topic: " + "MD/" + identifier + "/" + type);
+                    } else if(type.equals("smartgroup")) {
+                        Locator locator = MineduinoPlugin.getInstance().getSmartChestGroupLocator();
+                        locator.setLocationFor(identifier, type, e.getBlockPlaced().getLocation());
+                        e.getPlayer().sendMessage("[MD] Smart group chest created! Topic: " + "MD/" + identifier + "/" + type);
                     }
 
                 }

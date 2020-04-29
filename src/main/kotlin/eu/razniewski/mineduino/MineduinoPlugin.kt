@@ -28,6 +28,7 @@ class MineduinoPlugin : JavaPlugin() {
     var manager: ConfigManager = CachedJsonFileConfigManager("plugins/mineduino/config.json");
     var locator: Locator? = null
     var smartChestLocator: Locator? = null
+    var smartChestGroupLocator: Locator? = null
     var pathfinderManager: PathfinderManager? = null
     var brainManager: BrainManager? = null
     private fun enablePathFinder() {
@@ -67,6 +68,7 @@ class MineduinoPlugin : JavaPlugin() {
         instance = this
         locator = JsonConfigLocator("plugins/mineduino/locator.json")
         smartChestLocator = JsonConfigLocator("plugins/mineduino/smartchest.json")
+        smartChestGroupLocator = JsonConfigLocator("plugins/mineduino/smartchestgroup.json")
         if (!manager.getValue<Double>("version").isPresent) {
             manager.setValue("broker", "tcp://mineduino.eu:1883")
             manager.setValue("broker_login_username", "username")
