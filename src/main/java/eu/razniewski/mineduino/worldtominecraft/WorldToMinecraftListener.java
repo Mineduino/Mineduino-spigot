@@ -1,6 +1,5 @@
 package eu.razniewski.mineduino.worldtominecraft;
 
-import eu.razniewski.mineduino.MineduinoPlugin;
 import eu.razniewski.mineduino.connector.MineduinoMessageEvent;
 import eu.razniewski.mineduino.utils.ParsedTopic;
 import org.bukkit.event.EventHandler;

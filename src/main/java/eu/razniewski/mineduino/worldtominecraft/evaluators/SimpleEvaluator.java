@@ -7,16 +7,12 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.block.Block;
-import org.bukkit.block.Chest;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.InventoryHolder;
 import org.bukkit.inventory.ItemStack;
 
-import java.nio.ByteBuffer;
-import java.util.Arrays;
 import java.util.Optional;
 import java.util.function.Consumer;
-import java.util.function.Function;
 
 public class SimpleEvaluator implements Consumer<MineduinoMessageEvent> {
     int fromByteArray(byte[] bytes) {
@@ -66,13 +62,8 @@ class SetProperItemsRunnable implements Runnable {
     }
 
     public ItemStack[] getProperItemStack(int value, int maxValue) {
-        ItemStack[] stack = null;
-        if(value >= maxValue) {
-            stack = new ItemStack[maxValue];
-        } else {
-            stack = new ItemStack[value];
-        }
-        for (int i = 0; i < stack.length; i++) {
+        ItemStack[] stack = new ItemStack[maxValue];
+        for (int i = 0; i < value && i < stack.length; i++) {
             stack[i] = new ItemStack(Material.WOODEN_HOE, 1);
             stack[i].getItemMeta().setDisplayName("MINEDUINO");
         }

@@ -1,18 +1,12 @@
 package eu.razniewski.mineduino.connector;
 
-import com.hivemq.client.mqtt.MqttClient;
-import com.hivemq.client.mqtt.MqttClientState;
-import com.hivemq.client.mqtt.datatypes.MqttQos;
 import com.hivemq.client.mqtt.mqtt3.Mqtt3AsyncClient;
-import com.hivemq.client.mqtt.mqtt3.message.connect.connack.Mqtt3ConnAck;
 import eu.razniewski.mineduino.MineduinoPlugin;
 import eu.razniewski.mineduino.config.CachedJsonFileConfigManager;
 import eu.razniewski.mineduino.config.ConfigManager;
 
 import java.net.URISyntaxException;
 import java.nio.charset.Charset;
-import java.util.UUID;
-import java.util.concurrent.CompletableFuture;
 
 public class MqttHandler {
     ConfigManager manager;
@@ -51,7 +45,7 @@ public class MqttHandler {
         if (this.client == null) {
             throw new IllegalStateException("First of all connect to broker");
         }
-        client.publishWith().topic(topic).retain(true).payload(message.getBytes(Charset.forName("UTF-8"))).send();
+        client.publishWith().topic(topic).retain(false).payload(message.getBytes(Charset.forName("UTF-8"))).send();
         return true;
     }
 
@@ -59,7 +53,7 @@ public class MqttHandler {
         if (this.client == null) {
             throw new IllegalStateException("First of all connect to broker");
         }
-        client.publishWith().topic(topic).retain(true).payload(new byte[]{value}).send();
+        client.publishWith().topic(topic).retain(false).payload(new byte[]{value}).send();
         return true;
     }
 

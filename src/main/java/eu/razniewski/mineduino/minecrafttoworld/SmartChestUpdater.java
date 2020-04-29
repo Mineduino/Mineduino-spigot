@@ -1,6 +1,5 @@
 package eu.razniewski.mineduino.minecrafttoworld;
 
-import com.google.common.reflect.TypeToken;
 import com.google.gson.*;
 import eu.razniewski.mineduino.MineduinoPlugin;
 import eu.razniewski.mineduino.annotations.MethodTickRunnable;
@@ -8,7 +7,6 @@ import eu.razniewski.mineduino.annotations.TickRunnable;
 import eu.razniewski.mineduino.locator.Locator;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
-import org.bukkit.Material;
 import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.inventory.ItemStack;

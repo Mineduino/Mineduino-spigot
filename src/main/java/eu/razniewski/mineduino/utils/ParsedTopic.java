@@ -35,6 +35,10 @@ public class ParsedTopic {
         return Optional.of(new ParsedTopic(data[0], data[1], data[2]));
     }
 
+    public String getTopic() {
+        return prefix + "/" + identifier + "/" + type;
+    }
+
     @Override
     public boolean equals(Object o) {
         if (this == o) return true;

@@ -15,8 +15,6 @@ import org.bukkit.event.Listener;
 import org.bukkit.event.block.BlockPlaceEvent;
 import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.material.Redstone;
-import org.bukkit.material.RedstoneTorch;
 
 import java.util.Optional;
 
