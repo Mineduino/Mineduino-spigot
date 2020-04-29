@@ -11,10 +11,9 @@ import org.bukkit.block.Block;
 import org.bukkit.block.Container;
 import org.bukkit.inventory.ItemStack;
 
+import java.io.Serializable;
 import java.lang.reflect.Type;
-import java.util.ArrayList;
-import java.util.Iterator;
-import java.util.Map;
+import java.util.*;
 
 @TickRunnable(perTicks = 20 * 5)
 public class SmartChestUpdater {
@@ -36,6 +35,16 @@ public class SmartChestUpdater {
                 Bukkit.getScheduler().runTaskLater(MineduinoPlugin.getInstance(), new Updater(location, forTopic), 1);
 
             }
+        }
+
+        locator = MineduinoPlugin.getInstance().getSmartChestGroupLocator();
+        entryIterator = locator.getLoaded().entrySet().iterator();
+        while(entryIterator.hasNext()) {
+            Map.Entry<String, ArrayList<Location>> entry = entryIterator.next();
+            String[] parsed = entry.getKey().split(";");
+            String forTopic = "MD/" + parsed[0] + "/" + parsed[1];
+
+            Bukkit.getScheduler().runTaskLater(MineduinoPlugin.getInstance(), new GroupUpdater(entry.getValue(), forTopic), 1);
         }
     }
 }
@@ -82,3 +91,97 @@ class Updater implements Runnable {
 
     }
 }
+
+class SimpleItemStack implements Serializable {
+    private String material;
+    private int amount;
+
+    public SimpleItemStack(String material, int amount) {
+        this.material = material;
+        this.amount = amount;
+    }
+
+    public String getMaterial() {
+        return material;
+    }
+
+    public void setMaterial(String material) {
+        this.material = material;
+    }
+
+    public int getAmount() {
+        return amount;
+    }
+
+    public void setAmount(int amount) {
+        this.amount = amount;
+    }
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+        SimpleItemStack that = (SimpleItemStack) o;
+        return amount == that.amount &&
+                Objects.equals(material, that.material);
+    }
+
+    @Override
+    public int hashCode() {
+        return Objects.hash(material, amount);
+    }
+
+    @Override
+    public String toString() {
+        return "SimpleItemStack{" +
+                "material='" + material + '\'' +
+                ", amount=" + amount +
+                '}';
+    }
+}
+
+class GroupUpdater implements Runnable {
+    private ArrayList<Location> locs;
+    private String topic;
+
+    public GroupUpdater(ArrayList<Location> locs, String topic) {
+        this.locs = locs;
+        this.topic = topic;
+    }
+
+
+    @Override
+    public void run() {
+        /* Can't use here generic Map because of Serialization issues */
+        HashMap<String, Integer> itemMap = new HashMap<>();
+        for (Location loc: locs) {
+            Block b = loc.getBlock();
+            if(b.getState() instanceof Container) {
+                Container container = (Container) b.getState();
+                ItemStack[] stacks = container.getInventory().getStorageContents();
+                for (ItemStack stack :
+                        stacks) {
+                    if(stack != null) {
+                        String material = stack.getType().name();
+                        if (itemMap.containsKey(material)) {
+                            itemMap.put(material, itemMap.get(material) + stack.getAmount());
+                        } else {
+                            itemMap.put(material, stack.getAmount());
+                        }
+                    }
+                }
+            }
+
+        }
+        List<SimpleItemStack> itemStacks = new ArrayList<>();
+        itemMap.entrySet().forEach((stringIntegerEntry -> {
+            itemStacks.add(new SimpleItemStack(stringIntegerEntry.getKey(), stringIntegerEntry.getValue()));
+        }));
+        String jsoned = SmartChestUpdater.gson.toJson(itemStacks);
+        MineduinoPlugin.getMqttHandler().standardPublish(topic, jsoned);
+
+
+    }
+}
+
+
